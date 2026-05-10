@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clint Branwel Poyaoan — Portfolio</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=JetBrains+Mono:wght@300;400;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- SCANLINE OVERLAY -->
+  <div class="scanline-overlay"></div>
+  <!-- FILM STRIP SIDEBAR -->
+  <div class="filmstrip" id="filmstrip">
+    <div class="fs-holes">
+      <div class="fs-hole"></div><div class="fs-hole"></div><div class="fs-hole"></div>
+      <div class="fs-hole"></div><div class="fs-hole"></div><div class="fs-hole"></div>
+    </div>
+    <div class="fs-label" id="fs-label">01</div>
+    <div class="fs-track"><div class="fs-fill" id="fs-fill"></div></div>
+    <div class="fs-total">06</div>
+  </div>
+
+
+  <!-- CANVAS BACKGROUND -->
+  <canvas id="bg-canvas"></canvas>
+
+  <!-- NAV -->
+  <nav id="navbar">
+  <a href="#hero" class="nav-logo" style="cursor:pointer;text-decoration:none;color:inherit;">      <span class="logo-bracket">[</span>CB<span class="accent">.</span>DEV<span class="logo-bracket">]</span>
+  </a>
+    <ul class="nav-links">
+      <li><a href="#about"><span class="nav-num">01</span>About</a></li>
+      <li><a href="#skills"><span class="nav-num">02</span>Skills</a></li>
+      <li><a href="#experience"><span class="nav-num">03</span>Experience</a></li>
+      <li><a href="#projects"><span class="nav-num">04</span>Projects</a></li>
+      <li><a href="#certifications"><span class="nav-num">05</span>Certs</a></li>
+      <li><a href="#contact" class="nav-cta">Contact</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="#about" class="mob-link">About</a>
+    <a href="#skills" class="mob-link">Skills</a>
+    <a href="#experience" class="mob-link">Experience</a>
+    <a href="#projects" class="mob-link">Projects</a>
+    <a href="#certifications" class="mob-link">Certs</a>
+    <a href="#contact" class="mob-link">Contact</a>
+  </div>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-px-back" data-px="0.06"></div>
+    <div class="hero-px-mid" data-px="0.14"></div>
+    <div class="hero-hud-tl">STATUS<span class="accent">:</span>ONLINE</div>
+    <div class="hero-hud-tr">NEU<span class="accent">/</span>BSCS<span class="accent">/</span>2026</div>
+    <canvas id="radar-canvas"></canvas>
+
+    <div class="hero-inner">
+      <div class="hero-tag">
+        <span class="tag-line"></span>
+        <span class="blink">▶</span> BS COMPUTER SCIENCE · NEW ERA UNIVERSITY
+        <span class="tag-line"></span>
+      </div>
+      <h1 class="hero-name">
+        <span class="line1">CLINT BRANWEL</span>
+        <span class="line2">POYAOAN<span class="accent">.</span></span>
+      </h1>
+      <p class="hero-sub">
+        <span class="typed-text" id="typed"></span><span class="cursor-blink">█</span>
+      </p>
+      <div class="hero-badges">
+        <span class="badge cyber"><span class="badge-dot"></span>CYBERSECURITY</span>
+        <span class="badge data"><span class="badge-dot"></span>DATA SCIENCE</span>
+      </div>
+      <div class="hero-cta">
+        <a href="#projects" class="btn btn-primary">
+          <span class="btn-corner tl"></span>
+          <span class="btn-corner tr"></span>
+          VIEW PROJECTS
+          <span class="btn-corner bl"></span>
+          <span class="btn-corner br"></span>
+        </a>
+        <a href="#contact" class="btn btn-outline">GET IN TOUCH</a>
+        <div class="offduty-wrap">
+          <a href="offduty.html" class="btn btn-offduty"><span class="offduty-dot"></span>OFF-DUTY</a>
+          <a href="offduty.html" class="offduty-callout" aria-label="Visit off-duty page">
+            <span class="callout-text">know the person<br>behind the code</span>
+            <svg class="callout-arrow" width="42" height="36" viewBox="0 0 42 36" fill="none">
+              <path d="M 38 3 C 28 9, 15 18, 5 31" stroke="#ff3c5e" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M 0 25 L 5 31 L 12 26" stroke="#ff3c5e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </a>
+</div>
+        <a href="https://github.com/yoimuri" target="_blank" rel="noopener" class="btn btn-ghost">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+          GITHUB
+        </a>
+      </div>
+    </div>
+    <div class="scroll-hint">
+      <span>SCROLL</span>
+      <div class="scroll-arrow"></div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="section film-section" data-frame="01">
+    <div data-px="0.18"></div>
+    <div class="container">
+      <div class="section-label"><span class="label-num">01</span> ABOUT</div>
+      <div class="about-grid">
+        <div class="about-text reveal">
+          <h2 class="section-heading">Building at the intersection of <span class="accent">security</span> &amp; <span class="accent2">data</span>.</h2>
+          <p>I'm a BS Computer Science student at New Era University with hands-on experience in cybersecurity operations and data-driven application development. My internship at Great Pilipinas Black Bear Inc. gave me real-world exposure to OSINT, SIEM monitoring, and digital forensics.</p>
+          <p>Currently deepening blue team skills while learning red team concepts — aiming for a purple team role. On the data side, I build end-to-end pipelines and AI-integrated tools, including a published thesis on CCTV classroom object detection.</p>
+          <div class="about-info">
+            <div class="info-item">
+              <span class="info-label">LOCATION</span>
+              <span>Quezon City, PH</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">STATUS</span>
+              <span class="status-dot">Available for Internship</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">GRADUATION</span>
+              <span>2026</span>
+            </div>
+          </div>
+        </div>
+        <div class="about-visual reveal delay-2">
+          <div class="terminal-card hud-card">
+            <div class="hud-corner tl"></div>
+            <div class="hud-corner tr"></div>
+            <div class="hud-corner bl"></div>
+            <div class="hud-corner br"></div>
+            <div class="terminal-top">
+              <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+              <span class="terminal-title">whoami.sh</span>
+            </div>
+            <div class="terminal-body">
+              <p><span class="t-prompt">$</span> <span class="t-cmd">cat profile.json</span></p>
+              <p class="t-out">{</p>
+              <p class="t-out">&nbsp;&nbsp;"name": <span class="t-str">"Clint Branwel Poyaoan"</span>,</p>
+              <p class="t-out">&nbsp;&nbsp;"role": <span class="t-str">"Computer Science Intern"</span>,</p>
+              <p class="t-out">&nbsp;&nbsp;"focus": [</p>
+              <p class="t-out">&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-str">"Cybersecurity"</span>,</p>
+              <p class="t-out">&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-str">"Data Science"</span></p>
+              <p class="t-out">&nbsp;&nbsp;],</p>
+              <p class="t-out">&nbsp;&nbsp;"github": <span class="t-str">"yoimuri"</span>,</p>
+              <p class="t-out">&nbsp;&nbsp;"award": <span class="t-str">"Golden Harvest 2019"</span>,</p>
+              <p class="t-out">}</p>
+              <p><span class="t-prompt">$</span> <span class="cursor-blink">█</span></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <!-- FIX: restored section-alt class; removed malformed "</div section-alt">" -->
+  <section id="skills" class="section section-alt film-section" data-frame="02">
+    <div data-px="0.15"></div>
+    <div class="container">
+      <div class="section-label"><span class="label-num">02</span> SKILLS</div>
+      <h2 class="section-heading reveal scramble">TECHNICAL <span class="accent">LOADOUT</span></h2>
+      <div class="skills-grid">
+
+        <div class="skill-category hud-card reveal">
+          <div class="hud-corner tl"></div><div class="hud-corner tr"></div>
+          <div class="hud-corner bl"></div><div class="hud-corner br"></div>
+          <div class="skill-cat-header">
+            <span class="skill-icon">🛡</span>
+            <h3>Security &amp; SOC</h3>
+            <span class="skill-cat-line"></span>
+          </div>
+          <div class="skill-tags">
+            <span class="tag tag-sec">Wazuh SIEM</span>
+            <span class="tag tag-sec">Microsoft Sentinel</span>
+            <span class="tag tag-sec">Splunk</span>
+            <span class="tag tag-sec">OSINT</span>
+            <span class="tag tag-sec">Google Dorks</span>
+            <span class="tag tag-sec">DFIR</span>
+            <span class="tag tag-sec">TryHackMe</span>
+            <span class="tag tag-sec">Kali Linux</span>
+          </div>
+        </div>
+
+        <div class="skill-category hud-card reveal delay-1">
+          <div class="hud-corner tl"></div><div class="hud-corner tr"></div>
+          <div class="hud-corner bl"></div><div class="hud-corner br"></div>
+          <div class="skill-cat-header">
+            <span class="skill-icon">📊</span>
+            <h3>Data Science</h3>
+            <span class="skill-cat-line"></span>
+          </div>
+          <div class="skill-tags">
+            <span class="tag tag-data">Python</span>
+            <span class="tag tag-data">pandas</span>
+            <span class="tag tag-data">NumPy</span>
+            <span class="tag tag-data">SQL</span>
+            <span class="tag tag-data">Tableau</span>
+            <span class="tag tag-data">Power BI</span>
+            <span class="tag tag-data">Google Colab</span>
+            <span class="tag tag-data">MS Excel</span>
+          </div>
+        </div>
+
+        <div class="skill-category hud-card reveal delay-2">
+          <div class="hud-corner tl"></div><div class="hud-corner tr"></div>
+          <div class="hud-corner bl"></div><div class="hud-corner br"></div>
+          <div class="skill-cat-header">
+            <span class="skill-icon">⚙</span>
+            <h3>Development</h3>
+            <span class="skill-cat-line"></span>
+          </div>
+          <div class="skill-tags">
+            <span class="tag tag-dev">React</span>
+            <span class="tag tag-dev">TypeScript</span>
+            <span class="tag tag-dev">JavaScript</span>
+            <span class="tag tag-dev">Node.js</span>
+            <span class="tag tag-dev">PHP</span>
+            <span class="tag tag-dev">Java</span>
+            <span class="tag tag-dev">HTML/CSS</span>
+            <span class="tag tag-dev">Gradio</span>
+          </div>
+        </div>
+
+        <div class="skill-category hud-card reveal delay-3">
+          <div class="hud-corner tl"></div><div class="hud-corner tr"></div>
+          <div class="hud-corner bl"></div><div class="hud-corner br"></div>
+          <div class="skill-cat-header">
+            <span class="skill-icon">🔧</span>
+            <h3>Tools &amp; Platforms</h3>
+            <span class="skill-cat-line"></span>
+          </div>
+          <div class="skill-tags">
+            <span class="tag tag-tool">Git</span>
+            <span class="tag tag-tool">VS Code</span>
+            <span class="tag tag-tool">Supabase</span>
+            <span class="tag tag-tool">Vercel</span>
+            <span class="tag tag-tool">HuggingFace</span>
+            <span class="tag tag-tool">Arduino</span>
+            <span class="tag tag-tool">Linux</span>
+            <span class="tag tag-tool">Scrum/Sprint</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience" class="section film-section" data-frame="03">
+    <div data-px="0.2"></div>
+    <div class="container">
+      <div class="section-label"><span class="label-num">03</span> EXPERIENCE</div>
+      <h2 class="section-heading reveal scramble">FIELD <span class="accent">RECORD</span></h2>
+      <div class="timeline">
+
+        <div class="timeline-item reveal">
+          <div class="timeline-dot"><div class="dot-inner"></div></div>
+          <div class="timeline-date">OCT – DEC 2025</div>
+          <div class="timeline-card hud-card">
+            <div class="hud-corner tl"></div><div class="hud-corner tr"></div>
+            <div class="hud-corner bl"></div><div class="hud-corner br"></div>
+            <div class="tl-company">Great Pilipinas Black Bear Inc.</div>
+            <div class="tl-role">IT Intern — OSINT &amp; Data Analysis</div>
+            <ul class="tl-bullets">
+              <li>Structured OSINT research findings into organized data reports for analyst review</li>
+              <li>Interpreted SIEM log dashboards using pattern recognition and data-reading skills</li>
+              <li>Conducted data collection, correlation, and digital forensics workflows</li>
+              <li>Hands-on exposure to SOC operations and DFIR procedures</li>
+            </ul>
+            <div class="tl-tags">
+              <span class="tl-tag">OSINT</span><span class="tl-tag">SIEM</span><span class="tl-tag">DFIR</span><span class="tl-tag">SOC</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item reveal delay-1">
+          <div class="timeline-dot"><div class="dot-inner"></div></div>
+          <div class="timeline-date">OCT – DEC 2022</div>
+          <div class="timeline-card hud-card">
+            <div class="hud-corner tl"></div><div class="hud-corner tr"></div>
+            <div class="hud-corner bl"></div><div class="hud-corner br"></div>
+            <div class="tl-company">Brewing Point Neighborhood Café</div>
+            <div class="tl-role">Technical Assistant</div>
+            <ul class="tl-bullets">
+              <li>Operated photo booth systems at various events</li>
+              <li>Guided users through the experience — sharpened process discipline and UX awareness</li>
+            </ul>
+            <div class="tl-tags">
+              <span class="tl-tag">Operations</span><span class="tl-tag">Technical Support</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item reveal delay-2">
+          <div class="timeline-dot"><div class="dot-inner"></div></div>
+          <div class="timeline-date">2019 – 2023</div>
+          <div class="timeline-card hud-card">
+            <div class="hud-corner tl"></div><div class="hud-corner tr"></div>
+            <div class="hud-corner bl"></div><div class="hud-corner br"></div>
+            <div class="tl-company">Family-Owned Internet Café</div>
+            <div class="tl-role">IT Support Staff &amp; Systems Operator</div>
+            <ul class="tl-bullets">
+              <li>Maintained 20+ workstations and managed inventory via spreadsheets</li>
+              <li>Basic hardware/software troubleshooting, maintenance, and repair</li>
+              <li>Handled daily operations — built foundational IT and record-keeping discipline</li>
+            </ul>
+            <div class="tl-tags">
+              <span class="tl-tag">IT Support</span><span class="tl-tag">Hardware</span><span class="tl-tag">Operations</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <!-- FIX: restored section-alt class; removed malformed "</div section-alt">" -->
+  <section id="projects" class="section section-alt film-section" data-frame="04">
+    <div data-px="0.16"></div>
+    <div class="container">
+      <div class="section-label"><span class="label-num">04</span> PROJECTS</div>
+      <h2 class="section-heading reveal scramble">DEPLOYED <span class="accent">SYSTEMS</span></h2>
+      <div class="projects-grid">
+
+        <div class="project-card hud-card reveal featured">
+          <div class="hud-corner tl"></div><div class="hud-corner tr"></div>
+          <div class="hud-corner bl"></div><div class="hud-corner br"></div>
+          <div class="project-header">
+            <span class="project-num">// 01</span>
+            <span class="proj-status live">● LIVE</span>
+          </div>
+          <h3 class="project-title">SR-DINO CCTV Classroom<br>Object Detection</h3>
+          <p class="project-desc">Thesis published as ACM paper. Hybrid DINO + Real-ESRGAN framework for detecting prohibited items (phones, pens, pencil cases) in ceiling-mounted CCTV footage. 4,240 images · 89,522 annotations · mAP@50 of 0.731.</p>
+          <div class="project-tech">
+            <span>Python</span><span>DINO</span><span>Real-ESRGAN</span><span>Gradio</span><span>HuggingFace</span>
+          </div>
+          <div class="project-footer">
+            <a href="https://yoimuri-dino-classroom-detection.hf.space/" target="_blank" class="project-btn">Live Demo →</a>
+            <span class="project-year">2024–2025</span>
+          </div>
+        </div>
+
+        <div class="project-card hud-card reveal delay-1">
+          <div class="hud-corner tl"></div><div class="hud-corner tr"></div>
+          <div class="hud-corner bl"></div><div class="hud-corner br"></div>
+          <div class="project-header">
+            <span class="project-num">// 02</span>
+            <a href="https://github.com/yoimuri" target="_blank" class="proj-link" title="GitHub">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+            </a>
+          </div>
+          <h3 class="project-title">VioScan</h3>
+          <p class="project-desc">AI-powered image recognition system for uniform compliance classification. Built data labeling flow, model API integration, and structured Supabase database storage of flagged records.</p>
+          <div class="project-tech">
+            <span>React</span><span>Vite</span><span>Supabase</span><span>AI Vision</span><span>TypeScript</span>
+          </div>
+          <div class="project-footer">
+            <span class="project-year">2025</span>
+          </div>
+        </div>
+
+        <div class="project-card hud-card reveal delay-2">
+          <div class="hud-corner tl"></div><div class="hud-corner tr"></div>
+          <div class="hud-corner bl"></div><div class="hud-corner br"></div>
+          <div class="project-header">
+            <span class="project-num">// 03</span>
+          </div>
+          <h3 class="project-title">Diet Prescription App</h3>
+          <p class="project-desc">Collects biometric inputs (weight, height, age, activity level) to calculate BMI and generate personalized macronutrient recommendations — a complete data input-to-output pipeline with conditional logic.</p>
+          <div class="project-tech">
+            <span>MIT App Inventor</span><span>Health Data</span><span>BMI Logic</span>
+          </div>
+          <div class="project-footer">
+            <span class="project-year">2020</span>
+          </div>
+        </div>
+
+        <div class="project-card hud-card reveal delay-3">
+          <div class="hud-corner tl"></div><div class="hud-corner tr"></div>
+          <div class="hud-corner bl"></div><div class="hud-corner br"></div>
+          <div class="project-header">
+            <span class="project-num">// 04</span>
+          </div>
+          <h3 class="project-title">UREPATS — Universal Remote</h3>
+          <p class="project-desc">Arduino-based smart home remote using sensor input and conditional logic for real-time hardware-software data flow and decision-making output. Controls multiple home electronics.</p>
+          <div class="project-tech">
+            <span>Arduino</span><span>C</span><span>Embedded Systems</span><span>IoT</span>
+          </div>
+          <div class="project-footer">
+            <span class="project-year">2019</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CERTIFICATIONS -->
+  <section id="certifications" class="section film-section" data-frame="05">
+    <div data-px="0.18"></div>
+    <div class="container">
+      <div class="section-label"><span class="label-num">05</span> CERTIFICATIONS</div>
+      <h2 class="section-heading reveal scramble">CREDENTIALS &amp; <span class="accent">AWARDS</span></h2>
+      <div class="certs-grid">
+        <div class="cert-card hud-card reveal">
+          <div class="hud-corner tl"></div><div class="hud-corner tr"></div>
+          <span class="cert-icon">🏆</span>
+          <div class="cert-info">
+            <div class="cert-title">Golden Harvest Awardee</div>
+            <div class="cert-org">New Era University · DOST IP Competition · 2019</div>
+          </div>
+          <span class="cert-badge award">AWARD</span>
+        </div>
+        <div class="cert-card hud-card reveal delay-1">
+          <div class="hud-corner tl"></div><div class="hud-corner tr"></div>
+          <span class="cert-icon">🔐</span>
+          <div class="cert-info">
+            <div class="cert-title">Advent of Cyber 2025</div>
+            <div class="cert-org">TryHackMe</div>
+          </div>
+          <span class="cert-badge cyber">CYBER</span>
+        </div>
+        <div class="cert-card hud-card reveal delay-1">
+          <div class="hud-corner tl"></div><div class="hud-corner tr"></div>
+          <span class="cert-icon">🛡</span>
+          <div class="cert-info">
+            <div class="cert-title">Cyber Security 101</div>
+            <div class="cert-org">TryHackMe</div>
+          </div>
+          <span class="cert-badge cyber">CYBER</span>
+        </div>
+        <div class="cert-card hud-card reveal delay-2">
+          <div class="hud-corner tl"></div><div class="hud-corner tr"></div>
+          <span class="cert-icon">🔒</span>
+          <div class="cert-info">
+            <div class="cert-title">Pre-Security Certificate</div>
+            <div class="cert-org">TryHackMe</div>
+          </div>
+          <span class="cert-badge cyber">CYBER</span>
+        </div>
+        <div class="cert-card hud-card reveal delay-2">
+          <div class="hud-corner tl"></div><div class="hud-corner tr"></div>
+          <span class="cert-icon">🎯</span>
+          <div class="cert-info">
+            <div class="cert-title">Basic Cybersecurity &amp; CTF Training</div>
+            <div class="cert-org">Seminar / Competition</div>
+          </div>
+          <span class="cert-badge cyber">CYBER</span>
+        </div>
+        <div class="cert-card hud-card reveal delay-3">
+          <div class="hud-corner tl"></div><div class="hud-corner tr"></div>
+          <span class="cert-icon">📜</span>
+          <div class="cert-info">
+            <div class="cert-title">Cybersecurity Training Program</div>
+            <div class="cert-org">Industry Seminar</div>
+          </div>
+          <span class="cert-badge cyber">CYBER</span>
+        </div>
+        <div class="cert-card hud-card reveal delay-3">
+          <div class="hud-corner tl"></div><div class="hud-corner tr"></div>
+          <span class="cert-icon">🏛</span>
+          <div class="cert-info">
+            <div class="cert-title">Certificate of Eligibility — CSE Professional</div>
+            <div class="cert-org">Civil Service Commission</div>
+          </div>
+          <span class="cert-badge gov">GOV</span>
+        </div>
+        <div class="cert-card hud-card reveal delay-4">
+          <div class="hud-corner tl"></div><div class="hud-corner tr"></div>
+          <span class="cert-icon">💡</span>
+          <div class="cert-info">
+            <div class="cert-title">IT Industry Seminars</div>
+            <div class="cert-org">3D Modeling, Design, Career Paths</div>
+          </div>
+          <span class="cert-badge it">IT</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <!-- FIX: restored section-alt class; removed malformed "</div section-alt">" -->
+  <section id="contact" class="section section-alt film-section" data-frame="06">
+    <div data-px="0.14"></div>
+    <div class="container contact-container">
+      <div class="section-label"><span class="label-num">06</span> CONTACT</div>
+      <h2 class="section-heading reveal scramble">LET'S <span class="accent">CONNECT</span></h2>
+      <p class="contact-sub reveal delay-1">Open to internship opportunities in Cybersecurity and Data Science.</p>
+      <div class="contact-links reveal delay-2">
+        <a href="mailto:branwelclint.pro@gmail.com" class="contact-card hud-card">
+          <div class="hud-corner tl"></div><div class="hud-corner tr"></div>
+          <div class="hud-corner bl"></div><div class="hud-corner br"></div>
+          <span class="contact-icon">✉</span>
+          <div>
+            <div class="contact-label">EMAIL</div>
+            <div class="contact-value">branwelclint.pro@gmail.com</div>
+          </div>
+        </a>
+        <a href="https://github.com/yoimuri" target="_blank" rel="noopener" class="contact-card hud-card">
+          <div class="hud-corner tl"></div><div class="hud-corner tr"></div>
+          <div class="hud-corner bl"></div><div class="hud-corner br"></div>
+          <span class="contact-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+          </span>
+          <div>
+            <div class="contact-label">GITHUB</div>
+            <div class="contact-value">github.com/yoimuri</div>
+          </div>
+        </a>
+        <a href="https://www.linkedin.com/in/clint-branwel-p-b356a1364" target="_blank" rel="noopener" class="contact-card hud-card">
+          <div class="hud-corner tl"></div><div class="hud-corner tr"></div>
+          <div class="hud-corner bl"></div><div class="hud-corner br"></div>
+          <span class="contact-icon">in</span>
+          <div>
+            <div class="contact-label">LINKEDIN</div>
+            <div class="contact-value">Clint Branwel P.</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <span>© 2025 Clint Branwel Poyaoan</span>
+      <span class="footer-sep">//</span>
+      <span>Built with HTML, CSS &amp; JS</span>
+      <span class="footer-sep">//</span>
+      <a href="https://github.com/yoimuri" target="_blank">github.com/yoimuri</a>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
