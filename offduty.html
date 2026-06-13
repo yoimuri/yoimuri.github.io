@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Off-Duty — Clint Branwel Poyaoan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    :root {
+      --cyan:#00e5ff; --red:#ff3c5e; --green:#00ff88;
+      --amber:#ffc107; --purple:#a78bfa;
+      --bg:#03050b; --card:#070b16;
+      --border:rgba(255,255,255,0.06);
+      --muted:#546070; --text:#c0cfe0;
+      --mono:'JetBrains Mono',monospace;
+      --display:'Chakra Petch',sans-serif;
+    }
+    html { scroll-behavior:smooth; }
+    body { font-family:var(--display); background:var(--bg); color:var(--text); overflow-x:hidden; line-height:1.7; }
+    a { text-decoration:none; color:inherit; }
+    .scanlines { position:fixed; inset:0; z-index:9998; pointer-events:none; background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.022) 2px,rgba(0,0,0,0.022) 4px); }
+
+    /* BACK BUTTON */
+    .back-btn { position:fixed; top:1.5rem; left:2rem; z-index:200; font-family:var(--mono); font-size:0.68rem; letter-spacing:0.12em; color:var(--muted); border:1px solid var(--border); padding:0.45rem 1rem; background:rgba(3,5,11,0.85); backdrop-filter:blur(12px); transition:color .2s,border-color .2s; display:flex; align-items:center; gap:0.5rem; }
+    .back-btn:hover { color:var(--cyan); border-color:rgba(0,229,255,0.3); }
+    .nav-ghost { font-family:var(--mono); font-size:0.68rem; letter-spacing:0.12em; color:var(--muted); text-decoration:none; transition:color .2s; }
+    .nav-ghost:hover { color:var(--cyan); }
+
+    /* HERO */
+    .od-hero { min-height:100vh; display:flex; flex-direction:column; justify-content:flex-end; padding:6rem clamp(2rem,8vw,7rem) 4rem; position:relative; overflow:hidden; }
+    .od-hero::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 65% 55% at 85% 35%,rgba(255,60,94,0.07) 0%,transparent 65%),radial-gradient(ellipse 40% 40% at 15% 75%,rgba(167,139,250,0.05) 0%,transparent 60%); }
+    .od-eyebrow { font-family:var(--mono); font-size:0.65rem; letter-spacing:0.22em; color:var(--muted); margin-bottom:1.5rem; display:flex; align-items:center; gap:0.75rem; }
+    .od-eyebrow::before { content:''; display:inline-block; width:28px; height:1px; background:var(--red); }
+    .od-title { font-size:clamp(3.5rem,11vw,9rem); font-weight:700; line-height:0.88; letter-spacing:-0.03em; color:#fff; text-transform:uppercase; margin-bottom:1.75rem; position:relative; z-index:1; }
+    .od-title span { color:var(--red); }
+    .od-sub { font-family:var(--mono); font-size:0.88rem; color:var(--muted); max-width:500px; line-height:1.9; position:relative; z-index:1; }
+    .od-deco { position:absolute; right:clamp(1rem,5vw,4rem); bottom:2rem; font-size:clamp(12rem,28vw,25rem); font-weight:700; color:rgba(255,60,94,0.03); line-height:1; user-select:none; pointer-events:none; }
+
+    /* CHAPTERS */
+    .chapter { padding:5rem clamp(2rem,8vw,7rem); border-top:1px solid var(--border); position:relative; overflow:hidden; }
+    .chapter-wrap { max-width:1100px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:5rem; align-items:center; }
+    .chapter-wrap.flip { direction:rtl; }
+    .chapter-wrap.flip > * { direction:ltr; }
+    .chapter-deco { position:absolute; right:-2rem; top:50%; transform:translateY(-50%); font-size:clamp(10rem,20vw,18rem); font-weight:700; line-height:1; opacity:0.025; user-select:none; pointer-events:none; color:#fff; }
+    .ch-num { font-family:var(--mono); font-size:0.62rem; letter-spacing:0.2em; color:var(--muted); margin-bottom:0.8rem; }
+    .ch-title { font-size:clamp(2rem,4vw,3rem); font-weight:700; text-transform:uppercase; line-height:1.05; color:#fff; margin-bottom:1.25rem; }
+    .ch-desc { color:var(--muted); font-size:0.95rem; line-height:1.9; margin-bottom:2rem; }
+    .ch-tags { display:flex; flex-wrap:wrap; gap:0.4rem; }
+    .tag { font-family:var(--mono); font-size:0.63rem; padding:0.25rem 0.7rem; border:1px solid; letter-spacing:0.04em; }
+    .tag-r { border-color:rgba(255,60,94,0.3); color:var(--red); background:rgba(255,60,94,0.05); }
+    .tag-g { border-color:rgba(0,255,136,0.25); color:var(--green); background:rgba(0,255,136,0.04); }
+    .tag-a { border-color:rgba(255,193,7,0.25); color:var(--amber); background:rgba(255,193,7,0.04); }
+    .tag-p { border-color:rgba(167,139,250,0.3); color:var(--purple); background:rgba(167,139,250,0.05); }
+    .tag-c { border-color:rgba(0,229,255,0.25); color:var(--cyan); background:rgba(0,229,255,0.04); }
+    .tag-n { border-color:var(--border); color:var(--muted); }
+
+    /* VIS CARD */
+    .vis { background:var(--card); border:1px solid var(--border); padding:2rem; position:relative; }
+    .vis::before { content:''; position:absolute; top:-1px; left:-1px; right:-1px; height:2px; }
+    .vis.red::before{background:var(--red);} .vis.green::before{background:var(--green);}
+    .vis.amber::before{background:var(--amber);} .vis.cyan::before{background:var(--cyan);}
+    .vis.purple::before{background:var(--purple);}
+
+    /* MUSIC */
+    .player { display:flex; flex-direction:column; gap:1.5rem; }
+    .player-top { display:flex; gap:1rem; align-items:center; }
+    .album { width:70px; height:70px; background:linear-gradient(135deg,#120614,#3a0f20); border:1px solid rgba(255,60,94,0.2); display:flex; align-items:center; justify-content:center; font-size:1.8rem; flex-shrink:0; }
+    .track-name { font-weight:700; font-size:0.92rem; color:#fff; margin-bottom:0.2rem; }
+    .track-by { font-family:var(--mono); font-size:0.65rem; color:var(--muted); }
+    .waveform { display:flex; align-items:flex-end; gap:3px; height:44px; }
+    .waveform span { flex:1; border-radius:1px; opacity:0.75; animation:wave 1.3s ease-in-out infinite; }
+    .waveform span:nth-child(1){height:28%;animation-delay:0.00s} .waveform span:nth-child(2){height:65%;animation-delay:0.09s}
+    .waveform span:nth-child(3){height:95%;animation-delay:0.04s} .waveform span:nth-child(4){height:42%;animation-delay:0.14s}
+    .waveform span:nth-child(5){height:78%;animation-delay:0.07s} .waveform span:nth-child(6){height:100%;animation-delay:0.19s}
+    .waveform span:nth-child(7){height:55%;animation-delay:0.02s} .waveform span:nth-child(8){height:83%;animation-delay:0.11s}
+    .waveform span:nth-child(9){height:36%;animation-delay:0.17s} .waveform span:nth-child(10){height:70%;animation-delay:0.06s}
+    .waveform span:nth-child(11){height:22%;animation-delay:0.21s} .waveform span:nth-child(12){height:52%;animation-delay:0.01s}
+    @keyframes wave{0%,100%{transform:scaleY(1)}50%{transform:scaleY(0.22);opacity:0.35}}
+    .genre-grid { display:grid; grid-template-columns:1fr 1fr; gap:0.5rem; }
+    .genre-item { padding:0.65rem 0.9rem; border:1px solid rgba(255,60,94,0.15); background:rgba(255,60,94,0.04); display:flex; flex-direction:column; gap:0.15rem; }
+    .genre-name { font-size:0.82rem; font-weight:600; color:#fff; }
+    .genre-note { font-family:var(--mono); font-size:0.6rem; color:var(--muted); }
+
+    /* ═══════════════════════════════════════════
+       GAMING SECTION WITH VIDEO SUBSECTIONS
+    ═══════════════════════════════════════════ */
+    .game-subsections { display:flex; flex-direction:column; gap:2.5rem; }
+
+    .game-sub {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:1.5rem;
+      align-items:start;
+      background:var(--card);
+      border:1px solid var(--border);
+      overflow:hidden;
+      position:relative;
+    }
+    .game-sub::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; }
+    .game-sub.fps-sub::before   { background:var(--green); }
+    .game-sub.gacha-sub::before { background:var(--purple); }
+    .game-sub.moto-sub::before  { background:var(--amber); }
+    .moto-sub .game-video-wrap { min-height:300px; aspect-ratio:16/9; }
+
+    .game-sub-info { padding:1.5rem; }
+    .game-sub-title {
+      font-family:var(--mono); font-size:0.58rem; letter-spacing:0.18em;
+      color:var(--muted); margin-bottom:0.75rem; text-transform:uppercase;
+    }
+    .game-sub-heading { font-size:1.1rem; font-weight:700; color:#fff; margin-bottom:0.75rem; }
+    .game-sub-desc { font-family:var(--mono); font-size:0.68rem; color:var(--muted); line-height:1.8; margin-bottom:1rem; }
+    .game-sub-tags { display:flex; flex-wrap:wrap; gap:0.35rem; }
+    .game-sub-tag { font-family:var(--mono); font-size:0.58rem; padding:0.18rem 0.55rem; border:1px solid var(--border); color:var(--muted); }
+
+    .game-video-wrap {
+      position:relative;
+      height:100%;
+      min-height:260px;
+      background:#020408;
+      overflow:hidden;
+    }
+
+    /* ── SLIDESHOW ───────────────────────────────── */
+    .vid-slideshow {
+      position:absolute;
+      inset:0;
+    }
+    .vid-slide {
+      position:absolute !important;
+      inset:0;
+      width:100%;
+      height:100%;
+      min-height:unset !important;
+      object-fit:cover;
+      object-position:center;
+      display:block;
+      opacity:0;
+      transition:opacity 0.7s ease;
+    }
+    .vid-slide.active { opacity:1; }
+
+    /* ── NAV DOTS + COUNTER ─────────────────────── */
+    .vid-nav {
+      position:absolute;
+      bottom:0.65rem;
+      right:0.7rem;
+      z-index:3;
+      display:flex;
+      align-items:center;
+      gap:0.4rem;
+    }
+    .vid-dot {
+      width:5px;
+      height:5px;
+      border-radius:50%;
+      background:rgba(255,255,255,0.2);
+      transition:background 0.3s, transform 0.2s;
+      cursor:pointer;
+      flex-shrink:0;
+    }
+    .vid-dot:hover { background:rgba(255,255,255,0.45); }
+    .vid-dot.active { transform:scale(1.45); }
+    .fps-sub   .vid-dot.active { background:var(--green); }
+    .gacha-sub .vid-dot.active { background:var(--purple); }
+    .moto-sub  .vid-dot.active { background:var(--amber); }
+    .vid-idx {
+      font-family:var(--mono);
+      font-size:0.5rem;
+      letter-spacing:0.1em;
+      color:rgba(255,255,255,0.3);
+      margin-left:0.15rem;
+      user-select:none;
+    }
+
+    .vid-placeholder {
+      position:absolute; inset:0;
+      display:flex; flex-direction:column;
+      align-items:center; justify-content:center; gap:0.75rem;
+      background:#060a14;
+      border-left:1px solid var(--border);
+    }
+    .vid-ph-icon { font-size:2rem; opacity:0.3; }
+    .vid-ph-text { font-family:var(--mono); font-size:0.62rem; letter-spacing:0.12em; color:var(--muted); text-align:center; }
+    .vid-ph-hint { font-family:var(--mono); font-size:0.55rem; color:rgba(84,96,112,0.6); text-align:center; max-width:160px; line-height:1.7; }
+
+    /* Overlay label on video */
+    .vid-label {
+      position:absolute; top:0.75rem; left:0.75rem; z-index:2;
+      font-family:var(--mono); font-size:0.55rem; letter-spacing:0.14em;
+      padding:0.2rem 0.55rem; background:rgba(0,0,0,0.7);
+      backdrop-filter:blur(4px);
+    }
+    .vid-label.green  { border:1px solid rgba(0,255,136,0.3);   color:var(--green); }
+    .vid-label.purple { border:1px solid rgba(167,139,250,0.3); color:var(--purple); }
+    .vid-label.amber  { border:1px solid rgba(255,193,7,0.3);   color:var(--amber); }
+
+    /* MOTO specs */
+    .spec-list { display:flex; flex-direction:column; }
+    .spec-row { display:flex; justify-content:space-between; align-items:center; padding:0.85rem 0; border-bottom:1px solid rgba(255,255,255,0.04); }
+    .spec-row:last-child{border-bottom:none;}
+    .spec-k { font-family:var(--mono); font-size:0.65rem; letter-spacing:0.1em; color:var(--muted); }
+    .spec-v { font-size:0.88rem; font-weight:700; color:#fff; }
+    .spec-v.a { color:var(--amber); }
+    .rpm-wrap { display:flex; justify-content:center; margin-top:1.5rem; }
+
+    /* AI section */
+    .ai-grid { display:flex; flex-direction:column; gap:0.5rem; }
+    .ai-item { display:flex; align-items:flex-start; gap:1rem; padding:1rem; border:1px solid rgba(0,229,255,0.1); background:rgba(0,229,255,0.03); }
+    .ai-icon { font-size:1.2rem; flex-shrink:0; margin-top:0.1rem; }
+    .ai-label { font-weight:600; color:#fff; font-size:0.88rem; margin-bottom:0.2rem; }
+    .ai-note  { font-family:var(--mono); font-size:0.63rem; color:var(--muted); line-height:1.7; }
+
+    /* CODE block */
+    .code-block { background:#030508; border:1px solid rgba(255,255,255,0.08); padding:1.75rem; font-family:var(--mono); font-size:0.8rem; line-height:2.1; }
+    .cl-num{color:var(--muted);opacity:.4;margin-right:1.2rem;user-select:none;}
+    .cl-kw{color:var(--red);} .cl-str{color:var(--cyan);} .cl-tx{color:#c0cfe0;} .cl-cm{color:var(--muted);font-style:italic;}
+    .cl-hi{background:rgba(0,229,255,0.05);display:block;margin:0 -1.75rem;padding:0 1.75rem;}
+
+    /* FOOTER */
+    .od-footer { border-top:1px solid var(--border); padding:2rem clamp(2rem,8vw,7rem); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; }
+    .od-footer span { font-family:var(--mono); font-size:0.65rem; color:var(--muted); }
+    .back-link { font-family:var(--mono); font-size:0.68rem; letter-spacing:0.1em; color:var(--cyan); border:1px solid rgba(0,229,255,0.25); padding:0.5rem 1.25rem; transition:background .2s; }
+    .back-link:hover { background:rgba(0,229,255,0.06); }
+
+    /* FADE IN */
+    .fi { opacity:0; transform:translateY(24px); transition:opacity .65s ease,transform .65s ease; }
+    .fi.v { opacity:1; transform:none; }
+    .fi.d1{transition-delay:.1s;} .fi.d2{transition-delay:.2s;}
+
+    @media(max-width:768px){
+      .chapter-wrap,.chapter-wrap.flip{grid-template-columns:1fr;direction:ltr;gap:2.5rem;}
+      .od-deco,.chapter-deco{display:none;}
+      .game-sub{grid-template-columns:1fr;}
+      .game-video-wrap{min-height:210px;}
+    }
+  </style>
+</head>
+<body>
+  <div class="scanlines"></div>
+  <div style="position:fixed;top:1.5rem;left:2rem;z-index:200;display:flex;flex-direction:row;gap:1.5rem;align-items:center;">
+  <a href="index.html" class="nav-ghost">← BACK TO PORTFOLIO</a>
+  <a href="#top" class="nav-ghost">↑ TOP</a>
+</div>
+
+  <header class="od-hero" id="top">
+    <div class="od-eyebrow">CLINT BRANWEL POYAOAN · OFF-DUTY LOG</div>
+    <h1 class="od-title">Beyond<br>the<br><span>Terminal</span>.</h1>
+    <p class="od-sub">Not just code. Here's what I'm actually like when the terminal's closed.</p>
+    <div class="od-deco">B</div>
+  </header>
+
+  <!-- CH 1: MUSIC LISTENING -->
+  <section class="chapter" id="music">
+    <div class="chapter-deco">01</div>
+    <div class="chapter-wrap">
+      <div class="fi">
+        <div class="ch-num">// CHAPTER 01 · MUSIC</div>
+        <h2 class="ch-title" style="color:var(--red)">Flexible ears.<br>Strong opinions.</h2>
+        <p class="ch-desc">I listen to a lot of stuff. Rock and metal are always in there, hip-hop too. Cinematic OSTs when I'm working, lo-fi when I'm coding. Good riff or a groove that hits — that's really all it takes to get on the rotation.</p>
+        <div class="ch-tags">
+          <span class="tag tag-r">Rock</span><span class="tag tag-r">Punk Rock</span>
+          <span class="tag tag-r">Metal</span><span class="tag tag-r">Hip-Hop</span>
+          <span class="tag tag-n">Jazz Fusion</span><span class="tag tag-n">Cinematic / OST</span>
+          <span class="tag tag-n">Lo-Fi</span><span class="tag tag-n">Acoustic</span><span class="tag tag-n">Instrumental</span>
+        </div>
+      </div>
+      <div class="fi d1">
+        <div class="vis red">
+          <div class="player">
+            <div class="player-top">
+              <div class="album">🎸</div>
+              <div>
+                <div class="track-name">Now Playing</div>
+                <div class="track-by">Rock · Metal · Hip-Hop · Whatever hits right</div>
+              </div>
+            </div>
+            <div class="waveform">
+              <span style="background:var(--red)"></span><span style="background:var(--red)"></span>
+              <span style="background:var(--red)"></span><span style="background:var(--red)"></span>
+              <span style="background:var(--red)"></span><span style="background:var(--red)"></span>
+              <span style="background:var(--red)"></span><span style="background:var(--red)"></span>
+              <span style="background:var(--red)"></span><span style="background:var(--red)"></span>
+              <span style="background:var(--red)"></span><span style="background:var(--red)"></span>
+            </div>
+            <div class="genre-grid">
+              <div class="genre-item"><div class="genre-name">Rock / Punk</div><div class="genre-note">Primary. Always.</div></div>
+              <div class="genre-item"><div class="genre-name">Metal</div><div class="genre-note">Focus mode fuel.</div></div>
+              <div class="genre-item"><div class="genre-name">Hip-Hop</div><div class="genre-note">Rhythm and flow.</div></div>
+              <div class="genre-item"><div class="genre-name">Instrumental</div><div class="genre-note">Coding soundtrack.</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CH 2: INSTRUMENTS -->
+  <section class="chapter" id="instruments" style="background:rgba(255,60,94,0.015)">
+    <div class="chapter-deco" style="left:-2rem;right:auto;">02</div>
+    <div class="chapter-wrap flip">
+      <div class="fi">
+        <div class="ch-num">// CHAPTER 02 · INSTRUMENTS</div>
+        <h2 class="ch-title" style="color:var(--red)">Four strings,<br>six strings,<br>two sticks,<br>one mic.</h2>
+        <p class="ch-desc">Guitar, bass, drums, vocals — been at it for a while. Not a pro, just someone who actually enjoys figuring out how music works from every angle.</p>
+        <div class="ch-tags">
+          <span class="tag tag-r">🎸 Guitar</span><span class="tag tag-r">🥁 Drums</span>
+          <span class="tag tag-r">🎵 Bass</span><span class="tag tag-r">🎤 Lead Vocals</span><span class="tag tag-r">🎶 2nd Voice</span>
+        </div>
+      </div>
+      <div class="fi d1">
+        <div class="vis red" style="font-family:var(--mono);font-size:0.8rem;line-height:2.2;">
+          <div style="color:rgba(255,60,94,0.4);font-size:0.58rem;letter-spacing:0.18em;margin-bottom:1rem;">instruments.log</div>
+          <div><span style="color:var(--red)">guitar</span>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--muted)">··</span> <span style="color:#c0cfe0">rhythm + lead</span></div>
+          <div><span style="color:var(--red)">bass</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--muted)">··</span> <span style="color:#c0cfe0">groove + foundation</span></div>
+          <div><span style="color:var(--red)">drums</span>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--muted)">··</span> <span style="color:#c0cfe0">timing + energy</span></div>
+          <div><span style="color:var(--red)">vocals</span>&nbsp;&nbsp;&nbsp;<span style="color:var(--muted)">··</span> <span style="color:#c0cfe0">lead + 2nd voice</span></div>
+          <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);">
+            <span style="color:var(--muted)">status</span>&nbsp;&nbsp;&nbsp;<span style="color:var(--muted)">··</span> <span style="color:var(--green)">always practicing</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CH 3: GAMING WITH VIDEOS -->
+  <section class="chapter" id="gaming">
+    <div class="chapter-deco">03</div>
+    <div style="max-width:1100px;margin:0 auto;">
+      <div class="fi">
+        <div class="ch-num">// CHAPTER 03 · GAMING</div>
+        <h2 class="ch-title" style="color:var(--green);margin-bottom:0.75rem;">Always ranked.<br>Clutch or nothing.</h2>
+        <p class="ch-desc" style="max-width:600px;margin-bottom:2.5rem;">FPS, gacha, open world, horror, old-school RTS — yeah, I play a lot. Mostly competitive stuff, but I'll sit through a long grind too. Good game is a good game regardless of genre.</p>
+      </div>
+
+      <div class="game-subsections fi d1">
+
+        <!-- FPS / COMPETITIVE SUBSECTION -->
+        <div class="game-sub fps-sub">
+          <div class="game-sub-info">
+            <div class="game-sub-title">Subgenre 01 · FPS</div>
+            <div class="game-sub-heading">FPS / Competitive</div>
+            <p class="game-sub-desc">
+              Ranked grind. Aim training. Reaction time. Team communication.
+              The mental load of a competitive FPS is different from anything else —
+              you're making 10 decisions per second while staying calm.
+              That translates directly to how pressure is handled in a real environment.
+            </p>
+            <div class="game-sub-tags">
+              <span class="game-sub-tag" style="border-color:rgba(0,255,136,0.25);color:var(--green)">RANKED QUEUE</span>
+              <span class="game-sub-tag" style="border-color:rgba(0,255,136,0.25);color:var(--green)">AIM TRAINING</span>
+              <span class="game-sub-tag">QUICK TTK</span>
+              <span class="game-sub-tag">COMPETITIVE</span>
+            </div>
+          </div>
+
+          <!--
+          ╔══════════════════════════════════════════════════╗
+          ║  FPS VIDEOS — 2 SLOTS, SLIDESHOW AUTO-ADVANCES  ║
+          ╠══════════════════════════════════════════════════╣
+          ║  Slot 1: src="Valo.mp4"   (your Valorant clip)  ║
+          ║  Slot 2: src="Valo2.mp4"  (your 2nd FPS clip)   ║
+          ║  Place both .mp4 files in the same folder.       ║
+          ║  Leave src="" if you only have one video.        ║
+          ║  Open with VS Code Live Server to test autoplay. ║
+          ╚══════════════════════════════════════════════════╝
+          -->
+          <div class="game-video-wrap">
+            <div class="vid-slideshow">
+              <video class="vid-slide active"
+                src="vid/Valo.mp4"
+                muted playsinline preload="metadata"
+              ></video>
+              <video class="vid-slide"
+                src="vid/Valo2.mp4"
+                muted playsinline preload="metadata"
+              ></video>
+            </div>
+            <div class="vid-label green">● HIGHLIGHT REEL</div>
+            <div class="vid-nav">
+              <span class="vid-dot active"></span>
+              <span class="vid-dot"></span>
+              <span class="vid-idx">1 / 2</span>
+            </div>
+            <div class="vid-placeholder" id="fps-placeholder">
+              <div class="vid-ph-icon">🎮</div>
+              <div class="vid-ph-text">FPS HIGHLIGHT</div>
+              <div class="vid-ph-hint">Add Valo.mp4 + Valo2.mp4<br>Place in same folder as this file</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- GACHA / OPEN WORLD SUBSECTION -->
+        <div class="game-sub gacha-sub">
+          <div class="game-sub-info">
+            <div class="game-sub-title">Subgenre 02 · GACHA / OPEN WORLD</div>
+            <div class="game-sub-heading">Gacha · Grindy · Open World · Rhythm</div>
+            <p class="game-sub-desc">
+              Long sessions, resource management, world exploration.
+              These games reward patience and systematic thinking —
+              you plan builds, optimize routes, and track progress
+              across hundreds of hours. Different from FPS but equally
+              demanding in its own way.
+            </p>
+            <div class="game-sub-tags">
+              <span class="game-sub-tag" style="border-color:rgba(167,139,250,0.3);color:var(--purple)">OPEN WORLD</span>
+              <span class="game-sub-tag" style="border-color:rgba(167,139,250,0.3);color:var(--purple)">GACHA / RPG</span>
+              <span class="game-sub-tag">LONG SESSIONS</span>
+              <span class="game-sub-tag">GRINDY</span>
+            </div>
+          </div>
+
+          <!--
+          ╔══════════════════════════════════════════════════╗
+          ║  GACHA VIDEOS — HSR + GENSHIN SLIDESHOW          ║
+          ╠══════════════════════════════════════════════════╣
+          ║  Slot 1: src="HSR.mp4"      (Honkai Star Rail)  ║
+          ║  Slot 2: src="Genshin.mp4"  (Genshin Impact)    ║
+          ║  Place both .mp4 files in the same folder.       ║
+          ╚══════════════════════════════════════════════════╝
+          -->
+          <div class="game-video-wrap">
+            <div class="vid-slideshow">
+              <video class="vid-slide active"
+                src="vid/HSR.mp4"
+                muted playsinline preload="metadata"
+              ></video>
+              <video class="vid-slide"
+                src="vid/OSU.mp4"
+                muted playsinline preload="metadata"
+              ></video>
+            </div>
+            <div class="vid-label purple">● GAMEPLAY</div>
+            <div class="vid-nav">
+              <span class="vid-dot active"></span>
+              <span class="vid-dot"></span>
+              <span class="vid-idx">1 / 2</span>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /.game-subsections -->
+
+      <!-- Other genres row -->
+      <div class="fi d2" style="margin-top:1.5rem;display:flex;flex-wrap:wrap;gap:0.5rem;">
+        <span class="tag tag-n">Horror · 3AM</span>
+        <span class="tag tag-n">Story-driven RPG</span>
+        <span class="tag tag-n">Open World Exploration</span>
+        <span class="tag tag-n">Whatever hits</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CH 4: HARDWARE & MOTO -->
+  <section class="chapter" id="machines" style="background:rgba(255,193,7,0.015)">
+    <div class="chapter-deco" style="left:-2rem;right:auto;color:var(--amber)">04</div>
+
+    <!-- Text + Spec card row -->
+    <div class="chapter-wrap flip">
+      <div class="fi">
+        <div class="ch-num">// CHAPTER 04 · MACHINES</div>
+        <h2 class="ch-title" style="color:var(--amber)">Engine open.<br>Hands in.<br>Any<br>transmission.</h2>
+        <p class="ch-desc">Manual, matic, semi-auto? It doesn't matter, I can ride all of them. Same goes for PCs! I build and repair those too. Hardware's just another thing to learn and get right.</p>
+        <div class="ch-tags">
+          <span class="tag tag-a">🏍 Motorcycles</span>
+          <span class="tag tag-a">⚙ PC Hardware</span>
+          <span class="tag tag-a">🔧 Mechanical</span>
+          <span class="tag tag-n">Manual</span><span class="tag tag-n">Matic</span><span class="tag tag-n">Semi-auto</span>
+        </div>
+      </div>
+      <div class="fi d1">
+        <div class="vis amber">
+          <div class="spec-list">
+            <div class="spec-row"><span class="spec-k">RIDES</span><span class="spec-v a">Manual · Matic · Semi-auto</span></div>
+            <div class="spec-row"><span class="spec-k">PC SKILLS</span><span class="spec-v">Build · Repair · Upgrade</span></div>
+            <div class="spec-row"><span class="spec-k">HARDWARE EXP</span><span class="spec-v a">4+ Years (Internet Café)</span></div>
+            <div class="spec-row"><span class="spec-k">APPROACH</span><span class="spec-v">Diagnose first, fix second</span></div>
+          </div>
+          <div class="rpm-wrap">
+            <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:110px;height:110px;">
+              <circle cx="60" cy="60" r="52" stroke="rgba(255,193,7,0.08)" stroke-width="2"/>
+              <circle cx="60" cy="60" r="52" stroke="rgba(255,193,7,0.65)" stroke-width="2" stroke-dasharray="327" stroke-dashoffset="90" stroke-linecap="round" transform="rotate(-90 60 60)" style="animation:rpmP 2.5s ease-in-out infinite"/>
+              <text x="60" y="55" text-anchor="middle" fill="rgba(255,193,7,0.45)" font-size="8" font-family="JetBrains Mono,monospace" letter-spacing="3">RPM</text>
+              <text x="60" y="72" text-anchor="middle" fill="#ffc107" font-size="20" font-family="JetBrains Mono,monospace" font-weight="700">8.4K</text>
+              <style>@keyframes rpmP{0%,100%{stroke-dashoffset:90;opacity:.7}50%{stroke-dashoffset:52;opacity:1}}</style>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div><!-- /.chapter-wrap -->
+
+    <!-- ── MOTO VIDEO ROW ──────────────────────────────────────────────
+         Styled the same as FPS / Gacha sections above.
+         Two video slots — plays one, crossfades to the next, loops.
+         ─────────────────────────────────────────────────────────────── -->
+    <div style="max-width:1100px;margin:2.5rem auto 0;" class="fi d2">
+
+      <div class="game-sub moto-sub">
+        <div class="game-sub-info">
+          <div class="game-sub-title">Footage 01 · Motorcycling</div>
+          <div class="game-sub-heading">On The Road</div>
+          <p class="game-sub-desc">
+            Out on the road, any transmission. Morning ride or longer haul — doesn't matter. Just good to be riding.
+          </p>
+          <div class="game-sub-tags">
+            <span class="game-sub-tag" style="border-color:rgba(255,193,7,0.3);color:var(--amber)">RIDE LOG</span>
+            <span class="game-sub-tag" style="border-color:rgba(255,193,7,0.3);color:var(--amber)">ON THE ROAD</span>
+            <span class="game-sub-tag">MANUAL</span>
+            <span class="game-sub-tag">MATIC</span>
+            <span class="game-sub-tag">SEMI-AUTO</span>
+          </div>
+        </div>
+
+        <div class="game-video-wrap">
+          <div class="vid-slideshow">
+            <video class="vid-slide active"
+              src="vid/Moto1.mp4"
+              muted playsinline preload="metadata"
+            ></video>
+            <video class="vid-slide"
+              src="vid/Moto2.mp4"
+              muted playsinline preload="metadata"
+            ></video>
+          </div>
+          <div class="vid-label amber">● RIDE FOOTAGE</div>
+          <div class="vid-nav">
+            <span class="vid-dot active"></span>
+            <span class="vid-dot"></span>
+            <span class="vid-idx">1 / 2</span>
+          </div>
+          <div class="vid-placeholder" id="moto-placeholder">
+            <div class="vid-ph-icon">🏍</div>
+            <div class="vid-ph-text">RIDE FOOTAGE</div>
+            <div class="vid-ph-hint">Add Moto1.mp4 + Moto2.mp4<br>Place in same folder as this file</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /.moto video row -->
+
+  </section>
+
+  <!-- CH 5: AI WORKFLOW -->
+  <section class="chapter" id="ai-workflow">
+    <div class="chapter-deco" style="color:var(--cyan)">05</div>
+    <div class="chapter-wrap">
+      <div class="fi">
+        <div class="ch-num">// CHAPTER 05 · AI + WORKFLOW</div>
+        <h2 class="ch-title" style="color:var(--cyan)">AI isn't<br>replacing<br>the work.<br><span style="color:var(--cyan)">It multiplies it.</span></h2>
+        <p class="ch-desc">I use AI tools daily, not to skip the thinking, just to move faster. Code, research, debugging. If it helps and the output's still quality, it's in the workflow.</p>
+        <div class="ch-tags">
+          <span class="tag tag-c">AI-Integrated Workflow</span>
+          <span class="tag tag-c">Prompt Engineering</span>
+          <span class="tag tag-c">Productivity Tools</span>
+          <span class="tag tag-n">Code Assistance</span>
+          <span class="tag tag-n">Research Acceleration</span>
+          <span class="tag tag-n">Debugging Support</span>
+        </div>
+      </div>
+      <div class="fi d1">
+        <div class="vis cyan">
+          <div class="ai-grid">
+            <div class="ai-item"><div class="ai-icon">⚡</div><div><div class="ai-label">Code Faster</div><div class="ai-note">AI handles boilerplate and pattern lookup — leaving focus on architecture and logic.</div></div></div>
+            <div class="ai-item"><div class="ai-icon">🔍</div><div><div class="ai-label">Research Smarter</div><div class="ai-note">Summarize docs, cross-reference sources, explore domains faster than manual reading.</div></div></div>
+            <div class="ai-item"><div class="ai-icon">🧠</div><div><div class="ai-label">Debug Cleaner</div><div class="ai-note">AI as a rubber duck that can read the stack trace. Speeds up root-cause analysis.</div></div></div>
+            <div class="ai-item"><div class="ai-icon">🚀</div><div><div class="ai-label">Ship More</div><div class="ai-note">Same hours, better output. The bottleneck moves from "how" to "what to build next."</div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CH 6: THE THROUGH LINE -->
+  <section class="chapter" id="closing" style="background:rgba(167,139,250,0.015)">
+    <div class="chapter-deco" style="left:-2rem;right:auto;color:var(--purple)">06</div>
+    <div class="chapter-wrap flip">
+      <div class="fi">
+        <div class="ch-num">// CHAPTER 06 · THE THROUGH LINE</div>
+        <h2 class="ch-title" style="color:var(--purple)">Lowkey.<br>Adaptable.<br>Always<br>learning.</h2>
+        <p class="ch-desc">Music, games, machines, AI tools — I just pick stuff up and figure it out. New tool, new domain, doesn't matter. Give it time and I'll have it down.
+</p>
+        <div class="ch-tags">
+          <span class="tag tag-p">Adaptable</span><span class="tag tag-p">Self-Directed</span>
+          <span class="tag tag-p">Fast Learner</span><span class="tag tag-n">Lowkey</span>
+          <span class="tag tag-n">Capable</span><span class="tag tag-n">Guided Growth</span>
+        </div>
+      </div>
+      <div class="fi d1">
+        <div class="vis purple">
+          <div class="code-block">
+            <div style="color:rgba(167,139,250,0.4);font-size:0.58rem;letter-spacing:0.18em;margin-bottom:1rem;">clint_os.py</div>
+            <span><span class="cl-num">01</span><span class="cl-kw">def</span> <span class="cl-tx">clint(input):</span></span><br>
+            <span><span class="cl-num">02</span><span class="cl-tx">  understand(input)</span></span><br>
+            <span><span class="cl-num">03</span><span class="cl-tx">  adapt(context)</span></span><br>
+            <span><span class="cl-num">04</span><span class="cl-tx">  build(solution)</span></span><br>
+            <span><span class="cl-num">05</span><span class="cl-tx">  </span><span class="cl-kw">return</span> <span class="cl-str">quality_output</span></span><br><br>
+            <span class="cl-hi"><span><span class="cl-num">07</span><span class="cl-cm"># works on any domain</span></span></span><br>
+            <span class="cl-hi"><span><span class="cl-num">08</span><span class="cl-cm"># just give proper guidance</span></span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="od-footer">
+    <span>CLINT BRANWEL POYAOAN · OFF-DUTY LOG</span>
+    <a href="index.html" class="back-link">← BACK TO PORTFOLIO</a>
+  </footer>
+
+  <script>
+    // ── SCROLL FADE-IN (bidirectional) ─────────────────────────────
+    const faders = document.querySelectorAll('.fi');
+    const fadIO = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) e.target.classList.add('v');
+        else e.target.classList.remove('v');
+      });
+    }, { threshold: 0.1 });
+    faders.forEach(el => fadIO.observe(el));
+
+    // ── PARALLAX CHAPTER DECO NUMBERS ──────────────────────────────
+    const decos = document.querySelectorAll('.chapter-deco');
+    function updateDecos() {
+      decos.forEach(d => {
+        const rect = d.closest('.chapter').getBoundingClientRect();
+        d.style.transform = `translateY(calc(-50% + ${rect.top * 0.12}px))`;
+      });
+    }
+    window.addEventListener('scroll', updateDecos, { passive: true });
+    updateDecos();
+
+    function initSlideshow(wrap) {
+      const allSlides = Array.from(wrap.querySelectorAll('.vid-slide'));
+      const dots      = Array.from(wrap.querySelectorAll('.vid-dot'));
+      const idxEl     = wrap.querySelector('.vid-idx');
+      const ph        = wrap.querySelector('.vid-placeholder');
+
+      // Only consider slides that have a non-empty src attribute
+      const slides = allSlides.filter(v => {
+        const s = v.getAttribute('src');
+        return s && s.trim() !== '';
+      });
+
+      if (!slides.length) {
+        if (ph) ph.style.display = 'flex';
+        return;
+      }
+      if (ph) ph.style.display = 'none';
+
+      let cur = 0;
+      let paused = false; 
+
+      function updateUI() {
+        dots.forEach((d, i) => d.classList.toggle('active', i === cur));
+        if (idxEl) idxEl.textContent = (cur + 1) + ' / ' + slides.length;
+      }
+
+      function goTo(n) {
+        // Fade out current
+        slides[cur].classList.remove('active');
+        slides[cur].pause();
+        slides[cur].currentTime = 0;
+        // Advance index
+        cur = ((n % slides.length) + slides.length) % slides.length;
+        // Fade in next
+        slides[cur].classList.add('active');
+        if (!paused) slides[cur].play().catch(() => {});
+        updateUI();
+      }
+
+      // Auto-advance when a video ends
+      slides.forEach((vid, i) => {
+        vid.addEventListener('ended', () => goTo(i + 1));
+      });
+
+      // Clickable dots for manual switching
+      dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => {
+          if (i !== cur) goTo(i);
+        });
+      });
+
+      // Pause when section scrolls out of view; resume on re-entry
+      const visIO = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          paused = !e.isIntersecting;
+          if (e.isIntersecting) {
+            slides[cur].play().catch(() => {});
+          } else {
+            slides[cur].pause();
+          }
+        });
+      }, { threshold: 0.2 });
+      visIO.observe(wrap);
+
+      // Kick off first video
+      slides[0].play().catch(() => {});
+      updateUI();
+    }
+
+    // Init all video sections
+    document.querySelectorAll('.game-video-wrap').forEach(initSlideshow);
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const t = document.querySelector(a.getAttribute('href'));
+        if (!t) return;
+        e.preventDefault();
+        t.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+  </script>
+</body>
+</html>
