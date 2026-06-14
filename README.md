@@ -13,6 +13,7 @@ NOTE THAT THIS IS SUBJECT TO UPDATE EVERY NOW AND THEN SINCE WE ARE CURRENTLY BU
 
 Feel free to suggest me anything, ask ideas or contact me for professional inquiries using my work email: branwelclint.pro@gmail.com
 
+NEXT UPDATE: Potential API Abuse fix either manually or using scripts.
 ## 🚀 Live Demo
 
 Deployed via GitHub Pages: `https://yoimuri.github.io/portfolio`
