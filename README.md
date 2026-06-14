@@ -6,6 +6,15 @@ Personal portfolio website showcasing skills in Cybersecurity, Data Science, and
 
 Deployed via GitHub Pages: `https://yoimuri.github.io/portfolio`
 
+
+THIS IS A PERSONAL PROJECT. IF SOMETIMES FEATURES DON'T WORK, IT MEANS IT'S CURRENTLY UPDATING TO BETTER THIS WEB PORTFOLIO.
+
+THIS WEBSITE WILL BE A PERSONAL SNEAK PEEK FROM MY LIFE.
+
+NOTE THAT THIS IS SUBJECT TO UPDATE EVERY NOW AND THEN SINCE WE ARE CURRENTLY BUILDING OUR CREDENTIALS.
+
+
+
 ---
 
 ## 📁 File Structure
