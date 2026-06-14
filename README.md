@@ -2,16 +2,20 @@
 
 Personal portfolio website showcasing skills in Cybersecurity, Data Science, and Full-Stack Development.
 
-## 🚀 Live Demo
-
-Deployed via GitHub Pages: `https://yoimuri.github.io/portfolio`
-
-
 THIS IS A PERSONAL PROJECT. IF SOMETIMES FEATURES DON'T WORK, IT MEANS IT'S CURRENTLY UPDATING TO BETTER THIS WEB PORTFOLIO.
 
 THIS WEBSITE WILL BE A PERSONAL SNEAK PEEK FROM MY LIFE.
 
 NOTE THAT THIS IS SUBJECT TO UPDATE EVERY NOW AND THEN SINCE WE ARE CURRENTLY BUILDING OUR CREDENTIALS.
+
+# CURRENT UPDATE: 
+-Implemented AI Chat Bot to ask anything about myself. The knowledge of Ai to me is subject to change since I will either add or remove some informations that is relevant for people trying to know me.
+
+Feel free to suggest me anything, ask ideas or contact me for professional inquiries using my work email: branwelclint.pro@gmail.com
+
+## 🚀 Live Demo
+
+Deployed via GitHub Pages: `https://yoimuri.github.io/portfolio`
 
 
 
