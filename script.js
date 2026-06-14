@@ -427,7 +427,8 @@ function scrambleText(el) {
 /* ══ 16. AI CHATBOT ══════════════════════════════════════════ */
 (function initChatbot() {
   const API_KEY = GEMINI_API_KEY; // from config.js
-  const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${API_KEY}`;
+  const WORKER_URL = 'portfolio-gemini-bridge.branwelclint-pro.workers.dev';
+  /*const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${API_KEY}`;*/
 
   const SYSTEM_PROMPT = `You are an AI assistant embedded in Clint Branwel Poyaoan's personal portfolio website.
 
