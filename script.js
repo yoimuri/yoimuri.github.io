@@ -548,8 +548,11 @@ async function send() {
       body: JSON.stringify({
         system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
         contents: history,
-        generationConfig: { maxOutputTokens: 800, temperature: 0.7 }
-      })
+        generationConfig: {
+          maxOutputTokens: 800,
+          thinkingConfig: { thinkingLevel: "minimal" }
+  }
+})
     });
 
     if (res.status === 429) {
