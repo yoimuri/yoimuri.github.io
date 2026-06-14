@@ -499,7 +499,6 @@ async function send() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
         contents: history,
         generationConfig: {
           maxOutputTokens: 800,
