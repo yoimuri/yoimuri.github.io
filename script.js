@@ -514,15 +514,27 @@ async function send() {
     }
 
     const data = await res.json();
-    const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text
-      || 'Something went wrong. Try again.';
+    console.log('Gemini response:', data);
+
+    let reply;
+    if (!res.ok) {
+      reply = `Server error (${res.status}): ${data?.error?.message || JSON.stringify(data?.error) || 'unknown'}`;
+    } else if (data?.promptFeedback?.blockReason) {
+      reply = `Blocked: ${data.promptFeedback.blockReason}`;
+    } else if (data?.candidates?.[0]?.finishReason && data.candidates[0].finishReason !== 'STOP') {
+      reply = `Stopped early: ${data.candidates[0].finishReason}`;
+    } else {
+      reply = data?.candidates?.[0]?.content?.parts?.[0]?.text || 'Something went wrong. Try again.';
+    }
+
     typing.remove();
     addMsg(reply, 'bot');
     history.push({ role: 'model', parts: [{ text: reply }] });
 
-  } catch {
+  } catch (err) {
+    console.error('Fetch failed:', err);
     typing.remove();
-    addMsg('Network error. Try again.', 'bot');
+    addMsg(`Network error: ${err.message}`, 'bot');
   } finally {
     isLoading = false;
     sendBtn.disabled = false;
