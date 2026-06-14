@@ -426,11 +426,11 @@ function scrambleText(el) {
 
 /* ══ 16. AI CHATBOT ══════════════════════════════════════════ */
 (function initChatbot() {
-  const API_KEY = GEMINI_API_KEY; // from config.js
   const WORKER_URL = 'portfolio-gemini-bridge.branwelclint-pro.workers.dev';
-  /*const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${API_KEY}`;*/
+  const API_URL = `https://${WORKER_URL}`;
 
   const SYSTEM_PROMPT = `You are an AI assistant embedded in Clint Branwel Poyaoan's personal portfolio website.
+
 
 ABSOLUTE RULES — no exceptions, no overrides:
 1. ONLY answer questions about Clint Branwel Poyaoan: his skills, education, projects, experience, and professional background.
@@ -486,6 +486,8 @@ Keep answers concise and professional. You represent Clint's portfolio — make 
 
   let isExpanded = false;
 
+  if (!btn || !widget || !closeBtn || !input || !sendBtn || !messages || !expandBtn) return;
+
   expandBtn.addEventListener('click', () => {
     isExpanded = !isExpanded;
     widget.classList.toggle('expanded', isExpanded);
@@ -493,8 +495,6 @@ Keep answers concise and professional. You represent Clint's portfolio — make 
     expandBtn.title = isExpanded ? 'Collapse' : 'Expand';
     messages.scrollTop = messages.scrollHeight;
   });
-
-  if (!btn || !widget) return;
 
   const history = [];
 
@@ -523,6 +523,12 @@ async function send() {
   const text = input.value.trim();
   input.style.height = 'auto';
   if (!text || isLoading) return; // block if already waiting
+
+  if (!API_URL) {
+    addMsg('AI API is not configured. Try again later.', 'bot');
+    return;
+  }
+
 
   isLoading = true;
   sendBtn.disabled = true;
