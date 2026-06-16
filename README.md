@@ -1,125 +1,95 @@
-# Clint Branwel Poyaoan — Portfolio Website
+# Clint Branwel Poyaoan — Portfolio
 
-Personal portfolio website showcasing skills in Cybersecurity, Data Science, and Full-Stack Development.
+[![Live](https://img.shields.io/badge/Live-yoimuri.github.io-00ff88?style=flat-square)](https://yoimuri.github.io)
+[![GitHub Pages](https://img.shields.io/badge/Deployed-GitHub%20Pages-181717?style=flat-square&logo=github)](https://yoimuri.github.io)
+[![Built With](https://img.shields.io/badge/Built%20With-Vanilla%20JS-F7DF1E?style=flat-square&logo=javascript&logoColor=black)](https://github.com/yoimuri)
+[![Cloudflare Workers](https://img.shields.io/badge/API%20Proxy-Cloudflare%20Workers-F38020?style=flat-square&logo=cloudflare&logoColor=white)](https://workers.cloudflare.com)
 
-THIS IS A PERSONAL PROJECT. IF SOMETIMES FEATURES DON'T WORK, IT MEANS IT'S CURRENTLY UPDATING TO BETTER THIS WEB PORTFOLIO.
+Personal portfolio built with zero dependencies — vanilla HTML, CSS, and JavaScript. Includes a Gemini-powered AI chatbot that answers questions about my background, routed through a Cloudflare Worker to keep the API key server-side.
 
-THIS WEBSITE WILL BE A PERSONAL SNEAK PEEK FROM MY LIFE.
-
-NOTE THAT THIS IS SUBJECT TO UPDATE EVERY NOW AND THEN SINCE WE ARE CURRENTLY BUILDING OUR CREDENTIALS.
-
-# CURRENT UPDATE: 
--Implemented AI Chat Bot to ask anything about myself. The knowledge of Ai to me is subject to change since I will either add or remove some informations that is relevant for people trying to know me.
-
-Feel free to suggest me anything, ask ideas or contact me for professional inquiries using my work email: branwelclint.pro@gmail.com
-
-NEXT UPDATE: Potential API Abuse fix either manually or using scripts.
-## 🚀 Live Demo
-
-Deployed via GitHub Pages: `https://yoimuri.github.io/portfolio`
-
-
+**Live:** [yoimuri.github.io](https://yoimuri.github.io)
 
 ---
 
-## 📁 File Structure
+## Stack
 
-```
-portfolio/
-├── index.html      ← Main HTML structure
-├── style.css       ← All styles (dark cyber-data theme)
-├── script.js       ← Animations, particles, interactions
-└── README.md       ← This file
-```
+| Layer | Tech |
+|---|---|
+| Frontend | HTML5, CSS3, Vanilla JavaScript |
+| AI Chatbot | Google Gemini API |
+| API Proxy | Cloudflare Workers |
+| Hosting | GitHub Pages |
 
----
-
-## 🛠 Deploy to GitHub Pages (Step-by-Step)
-
-### Option A — New Repository
-
-1. Go to [github.com/new](https://github.com/new)
-2. Repository name: `portfolio` (or your GitHub username: `yoimuri.github.io`)
-3. Set to **Public**
-4. Click **Create repository**
-5. Upload the 3 files (`index.html`, `style.css`, `script.js`)
-6. Go to **Settings → Pages**
-7. Under **Source**, select `Deploy from a branch`
-8. Choose branch: `main`, folder: `/ (root)`
-9. Click **Save**
-10. Your site will be live at `https://yoimuri.github.io/portfolio`
-
-### Option B — Using Git CLI
-
-```bash
-# Clone or init repo
-git init
-git add .
-git commit -m "Initial portfolio deploy"
-git branch -M main
-git remote add origin https://github.com/yoimuri/portfolio.git
-git push -u origin main
-```
-
-Then enable Pages in repository Settings.
+No frameworks. No build tools. No package installs. Loads fast by design.
 
 ---
 
-## ✏️ Customizing
+## Pages
 
-### Update project links
-In `index.html`, find each `.project-btn` anchor and update the `href` to your actual project URLs:
-```html
-<a href="YOUR_PROJECT_URL" target="_blank" class="project-btn">View Project →</a>
+- `/` — Main portfolio: About, Skills, Experience, Projects, Certifications, Contact
+- `/offduty.html` — Personal off-duty page
+
+---
+
+## Features
+
+- Canvas particle network background
+- Typing animation in hero
+- Parallax scroll effect
+- Scroll-triggered reveal animations
+- Sticky navbar with active section tracking
+- Terminal card (`whoami.sh` / `cat profile.json` simulation)
+- Mobile responsive with hamburger menu
+- Cursor glow effect on desktop
+- AI chatbot widget — context-aware, knows my background and projects
+
+---
+
+## How the AI Chatbot Works
+
+The chatbot runs on a context prompt I wrote about my background, skills, and what I'm looking for professionally. When a user sends a message, it hits a Cloudflare Worker endpoint which proxies the call to the Gemini API server-side — the API key never touches the browser.
+
+To update what the AI knows about me, the system prompt inside the Worker gets edited directly.
+
+---
+
+## File Structure
+
 ```
-
-### Update LinkedIn URL
-Find this line and update with your full LinkedIn URL:
-```html
-<a href="https://www.linkedin.com/in/clint-branwel-p" ...>
-```
-
-### Update HuggingFace thesis link
-Find the DINO project card and update the link to your actual HuggingFace Space.
-
-### Add a profile photo
-In the About section you can add:
-```html
-<img src="photo.jpg" alt="Clint Branwel Poyaoan" class="about-photo" />
-```
-And in `style.css`:
-```css
-.about-photo {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid var(--cyan);
-  margin-bottom: 1.5rem;
-}
+/
+├── index.html        ← Main portfolio page
+├── offduty.html      ← Personal off-duty page
+├── style.css         ← All styles (dark cyber-data theme)
+├── script.js         ← Animations, particles, chatbot, interactions
+└── README.md         ← This file
 ```
 
 ---
 
-## 🎨 Features
+## Running Locally
 
-- ✅ Particle network background (canvas)
-- ✅ Typing text animation in hero
-- ✅ Parallax hero scroll effect
-- ✅ Scroll-triggered reveal animations
-- ✅ Sticky navbar with scroll state
-- ✅ Mobile responsive + hamburger menu
-- ✅ Terminal card in About section
-- ✅ Cursor glow effect (desktop)
-- ✅ Active section highlight in nav
-- ✅ All buttons & links functional
+No build step needed. Open `index.html` in any modern browser.
+
+> The AI chatbot requires a Cloudflare Worker with a valid Gemini API key to function.
+> Without it, the chat widget fails silently on the frontend — the rest of the site works fine.
 
 ---
 
-## 📱 Browser Support
+## Deployment
 
-Chrome, Firefox, Safari, Edge — all modern browsers.
+Auto-deploys from `main` branch root on every push via GitHub Pages.
+
+**Manual setup:**
+1. Fork or clone this repo
+2. Go to Settings → Pages → Source: `main` / `/ (root)`
+3. Site goes live at `https://<your-username>.github.io`
 
 ---
 
-Built with vanilla HTML, CSS, and JavaScript — zero dependencies, fast load, GitHub Pages ready.
+## Contact
+
+- **Email:** branwelclint.pro@gmail.com
+- **GitHub:** [github.com/yoimuri](https://github.com/yoimuri)
+- **LinkedIn:** [Clint Branwel P.](https://www.linkedin.com/in/clint-branwel-p-b356a1364)
+
+Open to entry-level roles in Cybersecurity, Data Science, and AI Development.
