@@ -216,11 +216,9 @@
   const el = document.getElementById('typed');
   if (!el) return;
   const phrases = [
-    'CS Student & Intern Applicant',
+    'B.S. Computer Science',
     'Cybersecurity Enthusiast',
     'Data Science Explorer',
-    'Blue Team → Purple Team',
-    'ACM Published · 2025',
     'Guitarist · Drummer · Vocalist',
     'Gamer. Builder. Rider.',
     'Lowkey. Adaptable. Fast Learner.',
@@ -250,9 +248,7 @@
   menu.querySelectorAll('.mob-link').forEach(l=>l.addEventListener('click',()=>{btn.classList.remove('open');menu.classList.remove('open');document.body.style.overflow='';}));
 })();
 
-/* ══ 5. TEXT SCRAMBLE ════════════════════════════════════════
-   FPS/hacker style: random chars resolve to real text.
-   Called fresh on every viewport entry — never stale.       */
+/* ══ 5. TEXT SCRAMBLE ════════════════════════════════════════*/
 function scrambleText(el) {
   const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&';
   if (!el.dataset.orig) el.dataset.orig = el.textContent;
@@ -269,12 +265,7 @@ function scrambleText(el) {
   }, 28);
 }
 
-/* ══ 6. SCROLL REVEAL — BOTH DIRECTIONS ═════════════════════
-   Key fix: NO io.unobserve().
-   · Entering viewport  → remove class, flush, re-add
-     (void offsetWidth forces animation restart)
-   · Leaving viewport   → remove class (resets for next time)
-   Works scrolling down AND back up, every single time.      */
+/* ══ 6. SCROLL REVEAL — BOTH DIRECTIONS ═════════════════════*/
 (function initReveal() {
   const els = document.querySelectorAll('.reveal');
   if (!els.length) return;
@@ -314,9 +305,7 @@ function scrambleText(el) {
   update();
 })();
 
-/* ══ 8. HERO MULTI-LAYER PARALLAX ═══════════════════════════
-   Three independent layers at different drift speeds.
-   Back layer slowest — feels physically deep.               */
+/* ══ 8. HERO MULTI-LAYER PARALLAX ═══════════════════════════*/
 (function initHeroParallax() {
   const hero  = document.getElementById('hero');
   const inner = hero?.querySelector('.hero-inner');
