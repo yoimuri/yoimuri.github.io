@@ -218,7 +218,7 @@
   const phrases = [
     'B.S. Computer Science',
     'Cybersecurity Enthusiast',
-    'Data Science Explorer',
+    'AI-Integrated Builder',
     'Guitarist · Drummer · Vocalist',
     'Gamer. Builder. Rider.',
     'Lowkey. Adaptable. Fast Learner.',
