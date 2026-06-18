@@ -548,7 +548,7 @@ async function send() {
    bots. Render's free tier can cold-start (~30-50s) after being
    idle — the status message adapts if a send is taking a while. */
 (function initContactForm() {
-  const N8N_WEBHOOK_URL = 'https://portfolio-gemini-bridge.branwelclint-pro.workers.dev/contact';
+  const N8N_WEBHOOK_URL = 'https://n8n-automation-7d4u.onrender.com/webhook/contact-form';
   const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // mirrors the IF node's check in n8n
   const SLOW_NOTICE_MS = 6000;
   const TIMEOUT_MS = 45000; //covers a cold Render instance waking up
@@ -601,45 +601,10 @@ async function send() {
       return;
     }
 
-    try {
-      isSending = true;
-      setStatus('Sending message...', 'loading');
-
-      const response = await fetch('https://n8n-automation-7d4u.onrender.com/webhook/webhook/contact-form', {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json' 
-        },
-        body: JSON.stringify({
-          name: nameEl.value.trim(),
-          email: emailEl.value.trim(),
-          message: msgEl.value.trim(),
-          honeypot: honeypot.value.trim() // Sends the blank string for humans, or text for bots
-        })
-      });
-
-        const data = await response.json();
-
-      if (data.status === 'received' && data.message) {
-        // Displays the custom string passed directly from n8n
-        setStatus(data.message, 'success'); 
-        form.reset();
-      } else if (data.status === 'received') {
-        // Fallback if n8n only passes back the status without a message string
-        setStatus("Message sent! I'll get back to you soon.", 'success');
-        form.reset();
-      } else {
-        setStatus('Something went wrong. Please try again.', 'error');
-      }
-    } catch (error) {
-      console.error(error);
-      setStatus('Network error. Please try again later.', 'error');
-    } finally {
-      // Unlocks the UI when the network call finishes
-      isSending = false;
-      submitBtn.disabled = false;
-      submitTxt.textContent = 'SEND'; 
-    }
+    isSending = true;
+    submitBtn.disabled = true;
+    submitTxt.textContent = 'SENDING...';
+    setStatus('Sending message...', 'loading');
 
     const slowNotice = setTimeout(() => {
       setStatus('Still sending — server may be waking up, hang tight...', 'pending');
@@ -655,7 +620,8 @@ async function send() {
         body: JSON.stringify({
           name: nameEl.value.trim(),
           email: emailEl.value.trim(),
-          message: msgEl.value.trim()
+          message: msgEl.value.trim(),
+          honeypot: honeypot.value.trim()
         }),
         signal: controller.signal
       });
@@ -663,11 +629,15 @@ async function send() {
       let data = null;
       try { data = await res.json(); } catch (_) { /* empty/non-JSON body is fine */ }
 
-      if (res.ok) {
+      if (res.ok && data?.message) {
+        // Shows the exact custom message n8n sends back (true-post or spam-post text)
+        setStatus(data.message, 'success');
+        form.reset();
+      } else if (res.ok) {
         setStatus("Message sent! I'll get back to you soon.", 'success');
         form.reset();
       } else {
-        setStatus(data?.message || data?.error || "That email looks invalid — double-check it and try again.", 'error');
+        setStatus(data?.message || data?.error || 'Something went wrong. Please try again.', 'error');
       }
     } catch (err) {
       console.error('Contact form failed:', err);
