@@ -727,6 +727,75 @@ ul { list-style: none; }
 .contact-label { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.14em; color: var(--muted); margin-bottom: 0.2rem; }
 .contact-value { font-family: var(--display); font-size: 0.82rem; font-weight: 600; color: #fff; letter-spacing: 0.04em; }
 
+/* ── CONTACT DIVIDER ── */
+.contact-divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  max-width: 560px;
+  margin: 3rem auto 0;
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+}
+.contact-divider::before,
+.contact-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ── CONTACT FORM ── */
+.contact-form-wrap { max-width: 560px; margin: 1.75rem auto 0; text-align: left; }
+.contact-form { padding: 1.75rem; display: flex; flex-direction: column; gap: 1.25rem; }
+.form-row { display: flex; flex-direction: column; gap: 0.5rem; }
+.form-label {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.form-label .t-prompt { color: var(--green); }
+.form-input {
+  width: 100%;
+  background: #04060c;
+  border: 1px solid var(--border);
+  color: #fff;
+  font-family: var(--mono);
+  font-size: 0.88rem;
+  padding: 0.75rem 0.9rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.form-input::placeholder { color: rgba(255,255,255,0.22); }
+.form-input:focus { border-color: var(--cyan); box-shadow: 0 0 0 1px var(--cyan-glow); }
+.form-input.invalid { border-color: var(--red); }
+.form-textarea { resize: vertical; min-height: 110px; line-height: 1.6; font-family: var(--mono); }
+
+/* Honeypot — visually hidden, still in the tab/DOM order for bots that auto-fill */
+.form-honeypot { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+.form-submit { width: 100%; justify-content: center; }
+.form-submit:disabled { opacity: 0.55; cursor: not-allowed; }
+.form-submit:disabled:hover { background: var(--cyan); color: #060810; box-shadow: none; }
+
+.form-status {
+  font-family: var(--mono);
+  font-size: 0.76rem;
+  letter-spacing: 0.02em;
+  min-height: 1.1em;
+}
+.form-status.pending { color: var(--muted); }
+.form-status.success { color: var(--green); }
+.form-status.error   { color: var(--red); }
+
+@media (max-width: 480px) {
+  .contact-form { padding: 1.25rem; }
+}
+
 /* ══════════════════════════════════════
    FOOTER
 ══════════════════════════════════════ */

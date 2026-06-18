@@ -402,8 +402,7 @@ function scrambleText(el) {
 })();
 
 /* ══ 15. VIDEO AUTOPLAY SAFETY ═══════════════════════════════
-   Plays video when in viewport, pauses when not.
-   Saves CPU/battery. Works around browser autoplay blocks.  */
+   Plays video when in viewport, pauses when not.  */
 (function initVideos() {
   const videos=document.querySelectorAll('video[autoplay]');
   if(!videos.length) return;
@@ -542,4 +541,113 @@ async function send() {
   input.style.height = 'auto';
   input.style.height = Math.min(input.scrollHeight, 90) + 'px';
 });
+})();
+
+/* ══ 17. CONTACT FORM ════════════════════════════════════════
+   POSTs to the n8n production webhook. Honeypot filters basic
+   bots. Render's free tier can cold-start (~30-50s) after being
+   idle — the status message adapts if a send is taking a while. */
+(function initContactForm() {
+  const N8N_WEBHOOK_URL = 'https://n8n-automation-7d4u.onrender.com/webhook/contact-form';
+  const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // mirrors the IF node's check in n8n
+  const SLOW_NOTICE_MS = 6000;
+  const TIMEOUT_MS = 45000; //covers a cold Render instance waking up
+
+  const form      = document.getElementById('contact-form');
+  const nameEl     = document.getElementById('cf-name');
+  const emailEl    = document.getElementById('cf-email');
+  const msgEl      = document.getElementById('cf-message');
+  const honeypot   = document.getElementById('cf-website');
+  const submitBtn  = document.getElementById('cf-submit');
+  const submitTxt  = document.getElementById('cf-submit-text');
+  const statusEl   = document.getElementById('cf-status');
+
+  if (!form || !nameEl || !emailEl || !msgEl || !submitBtn || !submitTxt || !statusEl) return;
+
+  let isSending = false;
+
+  function setStatus(text, type) {
+    statusEl.textContent = text;
+    statusEl.className = `form-status${type ? ' ' + type : ''}`;
+  }
+
+  function markInvalid(el, bad) {
+    el.classList.toggle('invalid', bad);
+  }
+
+  function validate() {
+    let ok = true;
+    [nameEl, emailEl, msgEl].forEach(el => markInvalid(el, false));
+
+    if (!nameEl.value.trim())              { markInvalid(nameEl, true);  ok = false; }
+    if (!EMAIL_RE.test(emailEl.value.trim())) { markInvalid(emailEl, true); ok = false; }
+    if (!msgEl.value.trim())               { markInvalid(msgEl, true);  ok = false; }
+    return ok;
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (isSending) return;
+
+    // Honeypot tripped — act like it worked, but never touch the network.
+    if (honeypot && honeypot.value.trim()) {
+      setStatus("Message sent! I'll get back to you soon.", 'success');
+      form.reset();
+      return;
+    }
+
+    if (!validate()) {
+      setStatus('Check the highlighted field(s) above.', 'error');
+      return;
+    }
+
+    isSending = true;
+    submitBtn.disabled = true;
+    submitTxt.textContent = 'SENDING...';
+    setStatus('Sending...', 'pending');
+
+    const slowNotice = setTimeout(() => {
+      setStatus('Still sending — server may be waking up, hang tight...', 'pending');
+    }, SLOW_NOTICE_MS);
+
+    const controller = new AbortController();
+    const abortTimer = setTimeout(() => controller.abort(), TIMEOUT_MS);
+
+    try {
+      const res = await fetch(N8N_WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: nameEl.value.trim(),
+          email: emailEl.value.trim(),
+          message: msgEl.value.trim()
+        }),
+        signal: controller.signal
+      });
+
+      let data = null;
+      try { data = await res.json(); } catch (_) { /* empty/non-JSON body is fine */ }
+
+      if (res.ok) {
+        setStatus("Message sent! I'll get back to you soon.", 'success');
+        form.reset();
+      } else {
+        setStatus(data?.message || data?.error || "That email looks invalid — double-check it and try again.", 'error');
+      }
+    } catch (err) {
+      console.error('Contact form failed:', err);
+      setStatus(
+        err.name === 'AbortError'
+          ? 'Taking too long to respond. Please try again in a moment.'
+          : 'Could not reach the server. Check your connection and try again.',
+        'error'
+      );
+    } finally {
+      clearTimeout(slowNotice);
+      clearTimeout(abortTimer);
+      isSending = false;
+      submitBtn.disabled = false;
+      submitTxt.textContent = 'SEND MESSAGE';
+    }
+  });
 })();

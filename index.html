@@ -549,6 +549,43 @@
           </div>
         </a>
       </div>
+
+      <div class="contact-divider reveal delay-3"><span>OR SEND A MESSAGE TO ME DIRECTLY</span></div>
+
+      <div class="contact-form-wrap reveal delay-4">
+        <div class="terminal-card hud-card">
+          <div class="hud-corner tl"></div><div class="hud-corner tr"></div>
+          <div class="hud-corner bl"></div><div class="hud-corner br"></div>
+          <div class="terminal-top">
+            <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+            <span class="terminal-title">send_message.sh</span>
+          </div>
+          <form id="contact-form" class="contact-form" novalidate>
+            <div class="form-row">
+              <label for="cf-name" class="form-label"><span class="t-prompt">$</span> name</label>
+              <input type="text" id="cf-name" name="name" class="form-input" placeholder="Juan dela Cruz" maxlength="100" autocomplete="name" required>
+            </div>
+            <div class="form-row">
+              <label for="cf-email" class="form-label"><span class="t-prompt">$</span> email</label>
+              <input type="email" id="cf-email" name="email" class="form-input" placeholder="you@email.com" maxlength="150" autocomplete="email" required>
+            </div>
+            <div class="form-row">
+              <label for="cf-message" class="form-label"><span class="t-prompt">$</span> message</label>
+              <textarea id="cf-message" name="message" class="form-input form-textarea" placeholder="What's up?" maxlength="2000" rows="4" required></textarea>
+            </div>
+            <div class="form-honeypot" aria-hidden="true">
+              <label for="cf-website">Website</label>
+              <input type="text" id="cf-website" name="website" tabindex="-1" autocomplete="off">
+            </div>
+            <button type="submit" class="btn btn-primary form-submit" id="cf-submit">
+              <span class="btn-corner tl"></span><span class="btn-corner tr"></span>
+              <span id="cf-submit-text">SEND MESSAGE</span>
+              <span class="btn-corner bl"></span><span class="btn-corner br"></span>
+            </button>
+            <div id="cf-status" class="form-status" role="status" aria-live="polite"></div>
+          </form>
+        </div>
+      </div>
     </div>
   </section>
 
