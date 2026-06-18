@@ -601,6 +601,39 @@ async function send() {
       return;
     }
 
+    try {
+      isSending = true;
+      setStatus('Sending message...', 'loading');
+
+      const response = await fetch('https://n8n-automation-7d4u.onrender.com/webhook/webhook/contact-form', {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json' 
+        },
+        body: JSON.stringify({
+          name: nameEl.value.trim(),
+          email: emailEl.value.trim(),
+          message: msgEl.value.trim(),
+          honeypot: honeypot.value.trim() // Sends the blank string for humans, or text for bots
+        })
+      });
+
+      const data = await response.json();
+
+      if (data.status === 'received' && data.message) {
+        setStatus(data.message, 'success'); 
+        form.reset();
+      } else {
+        setStatus('Something went wrong. Please try again.', 'error');
+      }
+    } catch (error) {
+      console.error(error);
+      setStatus('Network error. Please try again later.', 'error');
+    } finally {
+      isSending = false;
+    }
+
+
     isSending = true;
     submitBtn.disabled = true;
     submitTxt.textContent = 'SENDING...';
