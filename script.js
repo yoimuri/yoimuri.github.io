@@ -548,7 +548,7 @@ async function send() {
    bots. Render's free tier can cold-start (~30-50s) after being
    idle — the status message adapts if a send is taking a while. */
 (function initContactForm() {
-  const N8N_WEBHOOK_URL = 'https://n8n-automation-7d4u.onrender.com/webhook/contact-form';
+  const N8N_WEBHOOK_URL = 'https://portfolio-gemini-bridge.branwelclint-pro.workers.dev/contact';
   const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // mirrors the IF node's check in n8n
   const SLOW_NOTICE_MS = 6000;
   const TIMEOUT_MS = 45000; //covers a cold Render instance waking up
