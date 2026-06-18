@@ -618,10 +618,15 @@ async function send() {
         })
       });
 
-      const data = await response.json();
+        const data = await response.json();
 
       if (data.status === 'received' && data.message) {
+        // Displays the custom string passed directly from n8n
         setStatus(data.message, 'success'); 
+        form.reset();
+      } else if (data.status === 'received') {
+        // Fallback if n8n only passes back the status without a message string
+        setStatus("Message sent! I'll get back to you soon.", 'success');
         form.reset();
       } else {
         setStatus('Something went wrong. Please try again.', 'error');
@@ -630,14 +635,11 @@ async function send() {
       console.error(error);
       setStatus('Network error. Please try again later.', 'error');
     } finally {
+      // Unlocks the UI when the network call finishes
       isSending = false;
+      submitBtn.disabled = false;
+      submitTxt.textContent = 'SEND'; 
     }
-
-
-    isSending = true;
-    submitBtn.disabled = true;
-    submitTxt.textContent = 'SENDING...';
-    setStatus('Sending...', 'pending');
 
     const slowNotice = setTimeout(() => {
       setStatus('Still sending — server may be waking up, hang tight...', 'pending');
