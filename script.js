@@ -238,15 +238,18 @@
 (function initUpdateBanner() {
   const banner = document.getElementById('update-banner');
   if (!banner) return;
+  // sessionStorage, not localStorage: closing it hides the banner only for the
+  // current browsing session. It comes back on the next visit so the v2 notice
+  // stays findable instead of being killed for good on first close.
   let dismissed = false;
-  try { dismissed = localStorage.getItem('v2-banner-dismissed') === '1'; } catch (e) {}
+  try { dismissed = sessionStorage.getItem('v2-banner-dismissed') === '1'; } catch (e) {}
   if (dismissed) { banner.remove(); return; }
   banner.hidden = false;
   document.body.classList.add('has-banner');
   document.getElementById('ub-close').addEventListener('click', () => {
     banner.remove();
     document.body.classList.remove('has-banner');
-    try { localStorage.setItem('v2-banner-dismissed', '1'); } catch (e) {}
+    try { sessionStorage.setItem('v2-banner-dismissed', '1'); } catch (e) {}
   });
 })();
 
