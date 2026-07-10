@@ -217,8 +217,9 @@
   if (!el) return;
   const phrases = [
     'B.S. Computer Science',
-    'Cybersecurity Enthusiast',
-    'AI-Integrated Builder',
+    'Building AI Systems',
+    'Automation Pipelines',
+    'Threat Intel Background',
     'Guitarist · Drummer · Vocalist',
     'Gamer. Builder. Rider.',
     'Lowkey. Adaptable. Fast Learner.',
@@ -231,6 +232,22 @@
     setTimeout(type,delay);
   }
   setTimeout(type,1200);
+})();
+
+/* ══ 2b. V2 UPDATE BANNER ════════════════════════════════════ */
+(function initUpdateBanner() {
+  const banner = document.getElementById('update-banner');
+  if (!banner) return;
+  let dismissed = false;
+  try { dismissed = localStorage.getItem('v2-banner-dismissed') === '1'; } catch (e) {}
+  if (dismissed) { banner.remove(); return; }
+  banner.hidden = false;
+  document.body.classList.add('has-banner');
+  document.getElementById('ub-close').addEventListener('click', () => {
+    banner.remove();
+    document.body.classList.remove('has-banner');
+    try { localStorage.setItem('v2-banner-dismissed', '1'); } catch (e) {}
+  });
 })();
 
 /* ══ 3. NAVBAR ═══════════════════════════════════════════════ */

@@ -10,6 +10,17 @@
 </head>
 <body>
 
+  <!-- V2 UPDATE BANNER (revealed by script.js unless dismissed) -->
+  <div id="update-banner" class="update-banner" hidden>
+    <span class="ub-tag">[ v2 ]</span>
+    <span class="ub-text">
+      <span class="ub-long">psst: a newer, better version of this site is in the works.</span>
+      <span class="ub-short">new site in the works.</span>
+    </span>
+    <a href="https://yoimuri.vercel.app" target="_blank" rel="noopener" class="ub-link">take a peek →</a>
+    <button id="ub-close" class="ub-close" aria-label="Dismiss update notice">✕</button>
+  </div>
+
   <!-- SCANLINE OVERLAY -->
   <div class="scanline-overlay"></div>
   <!-- FILM STRIP SIDEBAR -->
@@ -76,8 +87,8 @@
         <span class="typed-text" id="typed"></span><span class="cursor-blink">█</span>
       </p>
       <div class="hero-badges">
+        <span class="badge data"><span class="badge-dot"></span>AI ENGINEERING</span>
         <span class="badge cyber"><span class="badge-dot"></span>CYBERSECURITY</span>
-        <span class="badge data"><span class="badge-dot"></span>AI WORKFLOW</span>
       </div>
       <div class="hero-cta">
         <a href="#projects" class="btn btn-primary">
@@ -117,9 +128,9 @@
       <div class="section-label"><span class="label-num">01</span> ABOUT</div>
       <div class="about-grid">
         <div class="about-text reveal">
-          <h2 class="section-heading">Building at the intersection of <span class="accent">security</span> &amp; <span class="accent2">AI</span>.</h2>
-          <p>BS Computer Science graduate from New Era University. Real-world cybersecurity experience from my internship at Great Pilipinas Black Bear Inc. — OSINT, SIEM monitoring, CTI reporting, and digital forensics.</p>
-          <p>I build and ship things, and I use AI tools as a core part of how I work as an actual productivity layer. My thesis is a computer vision system for CCTV footage, deployed live.</p> 
+          <h2 class="section-heading">Building <span class="accent2">AI systems</span> with a <span class="accent">security</span> mindset.</h2>
+          <p>BS Computer Science graduate from New Era University. Most of my time goes into building AI systems: a multi-agent research assistant, zero-cost automation pipelines, and a computer vision thesis that got published as an ACM paper.</p>
+          <p>The security side is real experience, not a keyword. My internship at Great Pilipinas Black Bear Inc. was threat intelligence work: OSINT and dark web recon, credential breach validation, and weekly CTI reports with hard deadlines.</p>
           <div class="about-info">
             <div class="info-item">
               <span class="info-label">LOCATION</span>
@@ -151,8 +162,8 @@
               <p class="t-out">&nbsp;&nbsp;"name": <span class="t-str">"Clint Branwel Poyaoan"</span>,</p>
               <p class="t-out">&nbsp;&nbsp;"role": <span class="t-str">"Computer Science Graduate"</span>,</p>
               <p class="t-out">&nbsp;&nbsp;"focus": [</p>
-              <p class="t-out">&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-str">"Cybersecurity"</span>,</p>
-              <p class="t-out">&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-str">"AI Workflow"</span></p>
+              <p class="t-out">&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-str">"AI Engineering"</span>,</p>
+              <p class="t-out">&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-str">"Cybersecurity"</span></p>
               <p class="t-out">&nbsp;&nbsp;],</p>
               <p class="t-out">&nbsp;&nbsp;"github": <span class="t-str">"yoimuri"</span>,</p>
               <p class="t-out">&nbsp;&nbsp;"award": <span class="t-str">"Golden Harvest 2019"</span>,</p>
@@ -273,15 +284,15 @@
             <div class="hud-corner tl"></div><div class="hud-corner tr"></div>
             <div class="hud-corner bl"></div><div class="hud-corner br"></div>
             <div class="tl-company">Great Pilipinas Black Bear Inc.</div>
-            <div class="tl-role">IT Intern — OSINT &amp; Data Analysis</div>
+            <div class="tl-role">Threat Intelligence Analyst Intern</div>
             <ul class="tl-bullets">
-              <li>Structured OSINT research findings into organized data reports for analyst review</li>
-              <li>Interpreted SIEM log dashboards using pattern recognition and data-reading skills</li>
-              <li>Conducted data collection, correlation, and digital forensics workflows</li>
-              <li>Hands-on exposure to SOC operations and DFIR procedures</li>
+              <li>Ran weekly OSINT and SOCMINT recon across the open web, dark web, and restricted platforms</li>
+              <li>Validated employee credentials against known breach databases and documented compromised accounts</li>
+              <li>Monitored social platforms for client mentions and early signs of security or reputational threats</li>
+              <li>Delivered structured weekly CTI reports on strict deadlines; DFIR exposure via a simulated incident response</li>
             </ul>
             <div class="tl-tags">
-              <span class="tl-tag">OSINT</span><span class="tl-tag">SIEM</span><span class="tl-tag">DFIR</span><span class="tl-tag">SOC</span>
+              <span class="tl-tag">OSINT</span><span class="tl-tag">SOCMINT</span><span class="tl-tag">CTI</span><span class="tl-tag">DFIR</span>
             </div>
           </div>
         </div>
@@ -341,6 +352,24 @@
           <div class="hud-corner bl"></div><div class="hud-corner br"></div>
           <div class="project-header">
             <span class="project-num">// 01</span>
+            <span class="proj-status indev">◐ IN DEV</span>
+          </div>
+          <h3 class="project-title">ARGUS: Multi-Agent<br>Research Assistant</h3>
+          <p class="project-desc">What I'm building right now. A team of AI agents that searches your uploaded documents and answers with citations and a confidence score. Security work happens in the open: adversarial test results are documented in the repo, pass or fail.</p>
+          <div class="project-tech">
+            <span>Next.js</span><span>FastAPI</span><span>LangGraph</span><span>Supabase pgvector</span><span>Groq</span>
+          </div>
+          <div class="project-footer">
+            <a href="https://github.com/yoimuri/argus" target="_blank" class="project-btn">GitHub →</a>
+            <span class="project-year">2026</span>
+          </div>
+        </div>
+
+        <div class="project-card hud-card reveal">
+          <div class="hud-corner tl"></div><div class="hud-corner tr"></div>
+          <div class="hud-corner bl"></div><div class="hud-corner br"></div>
+          <div class="project-header">
+            <span class="project-num">// 02</span>
             <span class="proj-status live">● LIVE</span>
           </div>
           <h3 class="project-title">SR-DINO CCTV Classroom<br>Object Detection</h3>
@@ -358,7 +387,7 @@
           <div class="hud-corner tl"></div><div class="hud-corner tr"></div>
           <div class="hud-corner bl"></div><div class="hud-corner br"></div>
           <div class="project-header">
-            <span class="project-num">// 02</span>
+            <span class="project-num">// 03</span>
             <a href="https://github.com/yoimuri" target="_blank" class="proj-link" title="GitHub">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
             </a>
@@ -377,7 +406,7 @@
       <div class="hud-corner tl"></div><div class="hud-corner tr"></div>
       <div class="hud-corner bl"></div><div class="hud-corner br"></div>
       <div class="project-header">
-        <span class="project-num">// 03</span>
+        <span class="project-num">// 04</span>
         <span class="proj-status live">● LIVE</span>
       </div>
       <h3 class="project-title">Personal Portfolio<br>with AI Chatbot</h3>
@@ -394,7 +423,7 @@
           <div class="hud-corner tl"></div><div class="hud-corner tr"></div>
           <div class="hud-corner bl"></div><div class="hud-corner br"></div>
           <div class="project-header">
-            <span class="project-num">// 04</span>
+            <span class="project-num">// 05</span>
             <span class="proj-status live">● LIVE</span>
           </div>
           <h3 class="project-title">AI-Driven Contact<br>Pipeline &amp; Automation</h3>
@@ -411,7 +440,7 @@
           <div class="hud-corner tl"></div><div class="hud-corner tr"></div>
           <div class="hud-corner bl"></div><div class="hud-corner br"></div>
           <div class="project-header">
-            <span class="project-num">// 05</span>
+            <span class="project-num">// 06</span>
           </div>
           <h3 class="project-title">Diet Prescription App</h3>
           <p class="project-desc">Collects biometric inputs (weight, height, age, activity level) to calculate BMI and generate personalized macronutrient recommendations — a complete data input-to-output pipeline with conditional logic.</p>
@@ -427,7 +456,7 @@
           <div class="hud-corner tl"></div><div class="hud-corner tr"></div>
           <div class="hud-corner bl"></div><div class="hud-corner br"></div>
           <div class="project-header">
-            <span class="project-num">// 06</span>
+            <span class="project-num">// 07</span>
           </div>
           <h3 class="project-title">UREPATS — Universal Remote</h3>
           <p class="project-desc">Arduino-based smart home remote using sensor input and conditional logic for real-time hardware-software data flow and decision-making output. Controls multiple home electronics.</p>
@@ -533,7 +562,7 @@
     <div class="container contact-container">
       <div class="section-label"><span class="label-num">06</span> CONTACT</div>
       <h2 class="section-heading reveal scramble">LET'S <span class="accent">CONNECT</span></h2>
-      <p class="contact-sub reveal delay-1">Open to entry-level roles in Cybersecurity and AI-integrated development.</p>
+      <p class="contact-sub reveal delay-1">Open to entry-level roles in AI engineering, automation, and security.</p>
       <div class="contact-links reveal delay-2">
         <a href="mailto:branwelclint.pro@gmail.com" class="contact-card hud-card">
           <div class="hud-corner tl"></div><div class="hud-corner tr"></div>

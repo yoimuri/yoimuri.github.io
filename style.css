@@ -36,6 +36,7 @@ ul { list-style: none; }
   --mono:      'JetBrains Mono', monospace;
   --display:   'Chakra Petch', sans-serif;
   --nav-h:     64px;
+  --banner-h:  40px;
   --pad:       100px;
   --max-w:     1100px;
   --corner-sz: 10px;
@@ -112,6 +113,65 @@ ul { list-style: none; }
 /* ══════════════════════════════════════
    NAV
 ══════════════════════════════════════ */
+
+/* ── V2 UPDATE BANNER ── */
+.update-banner {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 120;
+  height: var(--banner-h);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 0 0.75rem;
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  background: rgba(6, 8, 16, 0.96);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-hi);
+  animation: bannerDrop 0.4s ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .update-banner { animation: none; }
+}
+@keyframes bannerDrop {
+  from { transform: translateY(-100%); }
+  to   { transform: translateY(0); }
+}
+.ub-tag  { color: var(--green); white-space: nowrap; }
+.ub-text { color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ub-link {
+  color: var(--cyan);
+  border-bottom: 1px solid var(--cyan-glow);
+  white-space: nowrap;
+  transition: color 0.2s, border-color 0.2s;
+}
+.ub-link:hover { color: #fff; border-color: #fff; }
+.ub-close {
+  flex-shrink: 0;
+  min-width: 40px;
+  height: var(--banner-h);
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.ub-close:hover { color: var(--red); }
+.ub-short { display: none; }
+@media (max-width: 600px) {
+  .ub-long  { display: none; }
+  .ub-short { display: inline; }
+}
+/* everything fixed to the top shifts down while the banner is up */
+body.has-banner #navbar { top: var(--banner-h); }
+body.has-banner .mobile-menu { top: calc(var(--nav-h) + var(--banner-h)); }
+body.has-banner #hero { padding-top: calc(var(--nav-h) + var(--banner-h) + 2rem); }
+body.has-banner .hero-hud-tl,
+body.has-banner .hero-hud-tr { top: calc(var(--nav-h) + var(--banner-h) + 1rem); }
 
 #navbar {
   position: fixed;
@@ -641,6 +701,7 @@ ul { list-style: none; }
 .project-num { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.1em; color: var(--muted); }
 .proj-status { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.1em; }
 .proj-status.live { color: var(--green); animation: blink 2.5s ease-in-out infinite; }
+.proj-status.indev { color: var(--amber); animation: blink 2.5s ease-in-out infinite; }
 .proj-link { color: var(--muted); transition: color 0.2s; }
 .proj-link:hover { color: var(--cyan); }
 .project-title {
@@ -840,6 +901,9 @@ footer {
   .nav-links { display: none; }
   .hamburger { display: flex; }
   .hero-cta { flex-direction: column; align-items: flex-start; }
+  /* stacked buttons: reserve room so the graffiti callout (top:-58px)
+     lands in this gap instead of on the GET IN TOUCH button above */
+  .offduty-wrap { margin-top: 46px; }
   .timeline { padding-left: 1.5rem; }
   .timeline-item { padding-left: 1.25rem; }
   .timeline-dot { left: -2rem; }
