@@ -1,91 +1,76 @@
-# Clint Branwel Poyaoan — Portfolio
+# my portfolio (v1)
 
-[![Live](https://img.shields.io/badge/Live-yoimuri.github.io-00ff88?style=flat-square)](https://yoimuri.github.io)
-[![GitHub Pages](https://img.shields.io/badge/Deployed-GitHub%20Pages-181717?style=flat-square&logo=github)](https://yoimuri.github.io)
-[![Built With](https://img.shields.io/badge/Built%20With-Vanilla%20JS-F7DF1E?style=flat-square&logo=javascript&logoColor=black)](https://github.com/yoimuri)
-[![Cloudflare Workers](https://img.shields.io/badge/Serverless-Cloudflare%20Workers-F38020?style=flat-square&logo=cloudflare&logoColor=white)](https://workers.cloudflare.com)
-[![n8n](https://img.shields.io/badge/Automation-n8n-FF6C37?style=flat-square&logo=n8n&logoColor=white)](https://n8n.io)
+Hey, I'm Clint. This is my personal portfolio site and this repo is the whole thing. It's live at [yoimuri.github.io](https://yoimuri.github.io).
 
-Personal portfolio built with zero frontend dependencies — vanilla HTML, CSS, and JavaScript. Powered by a dual serverless and automated backend layer that drives a context-aware AI chatbot and an intelligent contact form automation pipeline.
+I built the front end from scratch with plain HTML, CSS, and JavaScript. No frameworks, no build step. Partly to prove I could, partly because I like how light it stays.
 
-**Live:** [yoimuri.github.io](https://yoimuri.github.io)
+Most of the site is animation and layout, but two parts actually do something behind the scenes: an AI chatbot that answers questions about me, and a contact form that filters and sorts messages on its own before they reach me. This README is mostly me explaining how those two work, for anyone curious and for future me when I forget.
 
----
+## how the chatbot works
 
-## Stack
+There's a little chat widget in the corner. You ask a question about me, it answers.
 
-| Layer | Tech | Why |
-|---|---|---|
-| **Frontend** | HTML5, CSS3, Vanilla JavaScript | No frameworks, no build tools. Light, clean, and loads fast. |
-| **API Proxy / Serverless** | Cloudflare Workers | Handles secure, server-side routing for API keys. |
-| **Automation Engine** | n8n (Self-hosted on Render) | Coordinates the contact form pipeline logic. |
-| **Database** | Supabase (PostgreSQL) | Stores contact data and metadata securely with RLS. |
-| **AI Processing** | Google Gemini API & Groq (LLaMA 3.1) | Powering the chat interaction and text classifications. |
-| **Hosting** | GitHub Pages | Host for static client files. |
+The catch is my API key. If it sat in the browser, anyone could grab it and run up my bill, so the browser never talks to the AI directly. It goes through a middleman:
 
----
+```
+your message  ->  my Cloudflare Worker  ->  Gemini  ->  back to you
+```
 
-## Architecture Overview
+The Worker is a tiny piece of server code in the middle. It holds the API key, attaches the system prompt (the hidden instructions that tell the AI who I am and what it's allowed to say), and passes the request along. The key stays server-side the entire time. The system prompt also shuts down prompt-injection attempts and won't give out anything private, just my public email and links.
 
-This portfolio leverages a decentralized, zero-cost (free-tier) cloud architecture to manage public interactions safely and intelligently:
+## how the contact form works
 
-[GitHub Pages Client]
-│
-├──► (Chat Widget) ──► [Cloudflare Worker] ──► [Gemini API] (Conversational responses)
-│
-└──► (Contact Form) ──► [Cloudflare Worker]
-│
-▼
-[n8n Automation Webhook]
-│
-┌────────────┴────────────┐
-▼                         ▼
-[IF Node Validate]       [Groq LLaMA 3.1 8B]
-│                         │
-(If Format Error)                ▼
-│               [JS Context Joiner]
-▼                         │
-[Drop Pipeline]                  ├──► [Supabase PostgreSQL]
-├──► [Gmail API OAuth Auto-Reply]
-└──► [Telegram Bot Push Alert]
+This is the part I'm proud of. When you send a message it doesn't just email me. It runs through a small pipeline that throws out junk and labels the real ones first.
 
----
+```
+form  ->  Cloudflare Worker  ->  n8n workflow  ->  Gmail + Telegram
+```
 
-## Features
+Walking through it:
 
-- **Canvas Particle Network:** Responsive cyber-data theme background.
-- **Interactive Terminal:** Custom interactive card (`whoami.sh` / `cat profile.json` simulation).
-- **AI Chatbot Widget:** Powered by `gemini-3.1-flash-lite`. Remembers context, project data, and professional background while maintaining server-side API key protection.
-- **AI-Driven Contact Pipeline:** A smart contact form backed by an n8n workflow on Render:
-  - **Serverless Form Handling:** Frontend inputs hook into a Cloudflare worker endpoint.
-  - **Regex Integrity Validation:** Immediate regex parsing drops invalid formats before execution to preserve AI processing quotas.
-  - **LLM Content Classification:** Messages are interpreted by LLaMA 3.1 (8B) via Groq to identify intent (`job_inquiry`, `collaboration`, `general`, `spam`) and generate a concise summary.
-  - **State Preservation Node:** Native JavaScript node parses and synthesizes asynchronous node payload contexts.
-  - **Database Persistence:** Stores structured submissions safely inside a Supabase PostgreSQL instance.
-  - **Automated Communication:** Fires an immediate auto-response to the sender via secure Gmail OAuth 2.0 and pings the owner's device via Telegram Bot API with real-time push alerts.
+- The Worker does a first pass. There's a hidden honeypot field that real people never touch but bots fill in, plus a regex check that blocks anything shaped like code or an injection attempt. That kills the lazy spam before it costs me anything.
+- What survives goes to an n8n workflow. n8n is a visual automation tool, so instead of writing a backend I wire nodes together. It's self-hosted on Render's free tier.
+- Inside n8n, a LLaMA model running on Groq reads the message, works out what it is (job inquiry, collaboration, general, or spam), writes a one-line summary, and scores how spammy it looks.
+- Real messages get saved to a Supabase database, send an auto-reply back to whoever wrote in, and ping my phone through a Telegram bot so I actually notice.
+- Spam just gets dropped, quietly.
 
----
+So by the time a message reaches me it's already checked, labeled, and summarized.
 
-## File Structure
+## the stack, and why
+
+- Vanilla HTML/CSS/JS on GitHub Pages. Loads fast, nothing to build.
+- Cloudflare Workers for the two backend endpoints. Free, quick, and it keeps my API keys out of the browser.
+- n8n on Render runs the contact automation so I can design the flow visually.
+- Groq (LLaMA) sorts the contact messages, Gemini runs the chat.
+- Supabase (Postgres) stores the contact submissions.
+- A Telegram bot handles the alerts to my phone.
+
+The whole thing runs on free tiers, so keeping it online costs me nothing.
+
+## what's in the repo
+
+```
 /
-├── index.html         ← Main portfolio page & contact UI
-├── offduty.html       ← Personal off-duty page
-├── style.css          ← All custom layout and interface styles
-├── script.js          ← UI animations, particle systems, interactive terminal, and chat logic
-└── README.md          ← Project architecture documentation
----
+├── index.html      the main page and the contact UI
+├── offduty.html    the off-duty page (the non-work side of me)
+├── style.css       all the layout and styling
+├── script.js       animations, the particle and radar canvas, the terminal card, chat logic
+└── README.md       this file
+```
 
-## Running Locally & Developing
+## running it locally
 
-1. No local building steps are required for the client code. Open `index.html` directly in any modern web browser.
-2. **Note on Backend features:** The AI Chatbot and Contact Form rely on operational Cloudflare Workers endpoints and an active n8n instance. If those services or their corresponding upstream keys (`GEMINI_API_KEY`, `GROQ_API_KEY`) are missing, backend forms will fail gracefully in the browser while the core UI works smoothly.
+The front end needs nothing. Clone the repo, open `index.html` in a browser, done. The animations, scrolling, and terminal card all run client-side.
 
----
+The chatbot and contact form won't do anything locally unless the backend is wired up, since they lean on my Cloudflare Worker and n8n instance being live with their keys set. That's expected. The site still looks and scrolls fine without them.
 
-## Contact & Links
+## heads up
 
-- **Email:** branwelclint.pro@gmail.com
-- **GitHub:** [github.com/yoimuri](https://github.com/yoimuri)
-- **LinkedIn:** [Clint Branwel P.](https://www.linkedin.com/in/clint-branwel-p-b356a1364)
+- The backends are on free tiers. Render falls asleep when nothing hits it for a while, so the first contact submit after a quiet stretch can take 30 to 60 seconds to wake up. It's not broken, just cold.
+- I'm building a v2 on a newer stack. It's still in the planning phase, so there's nothing to show yet. The banner up top points to my contact form for now instead of a dead link.
 
-*Open to entry-level roles in AI Development, Data Science, Prompt Engineering, and Cybersecurity.*
+## reach me
+
+- Email: branwelclint.pro@gmail.com
+- GitHub: [github.com/yoimuri](https://github.com/yoimuri)
+- LinkedIn: [Clint Branwel P.](https://www.linkedin.com/in/clint-branwel-p-b356a1364)
