@@ -48,6 +48,7 @@
       <li><a href="#experience"><span class="nav-num">03</span>Experience</a></li>
       <li><a href="#projects"><span class="nav-num">04</span>Projects</a></li>
       <li><a href="#certifications"><span class="nav-num">05</span>Certs</a></li>
+      <li><a href="offduty.html" class="nav-offduty"><span class="nav-offduty-dot"></span>Off-Duty</a></li>
       <li><a href="#contact" class="nav-cta">Contact</a></li>
     </ul>
     <button class="hamburger" id="hamburger" aria-label="Toggle menu">
@@ -62,6 +63,7 @@
     <a href="#experience" class="mob-link">Experience</a>
     <a href="#projects" class="mob-link">Projects</a>
     <a href="#certifications" class="mob-link">Certs</a>
+    <a href="offduty.html" class="mob-link mob-offduty">Off-Duty: more about me</a>
     <a href="#contact" class="mob-link">Contact</a>
   </div>
 
@@ -102,7 +104,7 @@
         <div class="offduty-wrap">
           <a href="offduty.html" class="btn btn-offduty"><span class="offduty-dot"></span>OFF-DUTY</a>
           <a href="offduty.html" class="offduty-callout" aria-label="Visit off-duty page">
-            <span class="callout-text">know the person<br>behind the code</span>
+            <span class="callout-text">want to know me<br>better? tap this</span>
             <svg class="callout-arrow" width="42" height="36" viewBox="0 0 42 36" fill="none">
               <path d="M 38 3 C 28 9, 15 18, 5 31" stroke="#ff3c5e" stroke-width="1.5" stroke-linecap="round"/>
               <path d="M 0 25 L 5 31 L 12 26" stroke="#ff3c5e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -131,6 +133,7 @@
           <h2 class="section-heading">Building <span class="accent2">AI systems</span> with a <span class="accent">security</span> mindset.</h2>
           <p>BS Computer Science graduate from New Era University. Most of my time goes into building AI systems: a multi-agent research assistant, zero-cost automation pipelines, and a computer vision thesis that got published as an ACM paper.</p>
           <p>The security side is real experience, not a keyword. My internship at Great Pilipinas Black Bear Inc. was threat intelligence work: OSINT and dark web recon, credential breach validation, and weekly CTI reports with hard deadlines.</p>
+          <p>I'm open to any IT role. AI and automation is where I want to go, and entry-level cybersecurity is the other direction I'd happily take. Outside those two, I still want to hear about it. I pick things up fast and I'd rather be learning than waiting.</p>
           <div class="about-info">
             <div class="info-item">
               <span class="info-label">LOCATION</span>
@@ -555,6 +558,33 @@
     </div>
   </section>
 
+  <!-- OFF-DUTY INVITE — full-width band so people who only scroll still see it -->
+  <section id="offduty-invite" class="offduty-band">
+    <a href="offduty.html" class="ob-card" aria-label="Off-duty page: more about me outside of work">
+      <span class="ob-glow" aria-hidden="true"></span>
+      <span class="ob-body">
+        <span class="ob-eyebrow"><span class="ob-dot"></span>OFF-DUTY</span>
+        <span class="ob-title">Want to know me better?</span>
+        <span class="ob-desc">
+          The rest of this page is my work. This part is just me: the music I play, the games I
+          grind, the bikes and PCs I take apart. Two minutes, no jargon.
+        </span>
+        <span class="ob-cta">
+          More about me
+          <svg class="ob-arrow" width="18" height="12" viewBox="0 0 18 12" fill="none" aria-hidden="true">
+            <path d="M1 6h15M11 1l5 5-5 5" stroke="currentColor" stroke-width="1.6"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </span>
+      <span class="ob-art" aria-hidden="true">
+        <span class="ob-icon">&#9834;</span>
+        <span class="ob-icon">&#9670;</span>
+        <span class="ob-icon">&#9673;</span>
+      </span>
+    </a>
+  </section>
+
   <!-- CONTACT -->
   <!-- FIX: restored section-alt class; removed malformed "</div section-alt">" -->
   <section id="contact" class="section section-alt film-section" data-frame="06">
@@ -562,7 +592,7 @@
     <div class="container contact-container">
       <div class="section-label"><span class="label-num">06</span> CONTACT</div>
       <h2 class="section-heading reveal scramble">LET'S <span class="accent">CONNECT</span></h2>
-      <p class="contact-sub reveal delay-1">Open to entry-level roles in AI engineering, automation, and security.</p>
+      <p class="contact-sub reveal delay-1">Open to any IT role. I'm most interested in AI and automation work, and in entry-level cybersecurity. But if you think I'd fit somewhere else on your team, message me anyway.</p>
       <div class="contact-links reveal delay-2">
         <a href="mailto:branwelclint.pro@gmail.com" class="contact-card hud-card">
           <div class="hud-corner tl"></div><div class="hud-corner tr"></div>
@@ -605,6 +635,13 @@
             <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
             <span class="terminal-title">send_message.sh</span>
           </div>
+          <p class="form-notice">
+            <span class="form-notice-icon" aria-hidden="true">!</span>
+            <span><strong>Before you send:</strong> this form runs on a free server that goes to
+            sleep when nobody is using it. If your first try fails or takes a while, that is the
+            server waking up. Give it a moment and send again, or just email me directly at
+            <a href="mailto:branwelclint.pro@gmail.com">branwelclint.pro@gmail.com</a>.</span>
+          </p>
           <form id="contact-form" class="contact-form" novalidate>
             <div class="form-row">
               <label for="cf-name" class="form-label"><span class="t-prompt">$</span> name</label>
