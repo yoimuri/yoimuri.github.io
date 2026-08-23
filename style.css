@@ -658,6 +658,9 @@ body.has-banner .hero-hud-tr { top: calc(var(--nav-h) + var(--banner-h) + 1rem);
 }
 .dot-inner { width: 6px; height: 6px; background: var(--cyan); }
 .timeline-date { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.14em; color: var(--cyan); margin-bottom: 0.75rem; }
+/* quieter qualifier next to a date, e.g. "part-time, event-based" */
+.tl-date-note { color: var(--muted); letter-spacing: 0.06em; text-transform: none; }
+@media (max-width: 480px) { .tl-date-note { display: block; margin-top: 0.15rem; } }
 .timeline-card {
   background: var(--card);
   border: 1px solid var(--border);
