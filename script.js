@@ -432,146 +432,23 @@ function scrambleText(el) {
   videos.forEach(v=>{ v.muted=true; io.observe(v); });
 })();
 
-/* ══ 16. AI CHATBOT ══════════════════════════════════════════ */
-(function initChatbot() {
-  const WORKER_URL = 'portfolio-gemini-bridge.branwelclint-pro.workers.dev';
-  const API_URL = `https://${WORKER_URL}`;
-
-  const btn = document.getElementById('chat-btn');
-  const widget = document.getElementById('chat-widget');
-  const closeBtn = document.getElementById('chat-close');
-  const input = document.getElementById('chat-input');
-  const sendBtn = document.getElementById('chat-send');
-  const messages = document.getElementById('chat-messages');
-  const expandBtn = document.getElementById('chat-expand');
-
-  let isExpanded = false;
-
-  if (!btn || !widget || !closeBtn || !input || !sendBtn || !messages || !expandBtn) return;
-
-  expandBtn.addEventListener('click', () => {
-    isExpanded = !isExpanded;
-    widget.classList.toggle('expanded', isExpanded);
-    expandBtn.textContent = isExpanded ? '⤡' : '⤢';
-    expandBtn.title = isExpanded ? 'Collapse' : 'Expand';
-    messages.scrollTop = messages.scrollHeight;
-  });
-
-  const history = [];
-
-  btn.addEventListener('click', () => widget.classList.remove('hidden'));
-  closeBtn.addEventListener('click', () => widget.classList.add('hidden'));
-
-  function parseMarkdown(text) {
-  return text
-    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-    .replace(/\*(.*?)\*/g, '<em>$1</em>')
-    .replace(/\n/g, '<br>');
-}
-
-  function addMsg(text, role) {
-    const div = document.createElement('div');
-    div.className = `chat-msg ${role}`;
-    div.innerHTML = parseMarkdown(text);
-    messages.appendChild(div);
-    messages.scrollTop = messages.scrollHeight;
-    return div;
-  }
-
-let isLoading = false; // add this above the send function
-
-async function send() {
-  const text = input.value.trim();
-  input.style.height = 'auto';
-  if (!text || isLoading) return; // block if already waiting
-
-  if (!API_URL) {
-    addMsg('AI API is not configured. Try again later.', 'bot');
-    return;
-  }
-
-
-  isLoading = true;
-  sendBtn.disabled = true;
-  input.disabled = true;
-  sendBtn.style.opacity = '0.4';
-
-  input.value = '';
-  addMsg(text, 'user');
-  history.push({ role: 'user', parts: [{ text }] });
-
-  const typing = addMsg('...', 'bot typing');
-
-  try {
-    const res = await fetch(API_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: history,
-        generationConfig: {
-          maxOutputTokens: 800,
-          thinkingConfig: { thinkingLevel: "minimal" }
-  }
-})
-    });
-
-    if (res.status === 429) {
-      typing.remove();
-      addMsg('Too many requests. Wait a few seconds and try again.', 'bot');
-      return;
-    }
-
-    const data = await res.json();
-    console.log('Gemini response:', data);
-
-    let reply;
-    if (!res.ok) {
-      reply = `Server error (${res.status}): ${data?.error?.message || JSON.stringify(data?.error) || 'unknown'}`;
-    } else if (data?.promptFeedback?.blockReason) {
-      reply = `Blocked: ${data.promptFeedback.blockReason}`;
-    } else if (data?.candidates?.[0]?.finishReason && data.candidates[0].finishReason !== 'STOP') {
-      reply = `Stopped early: ${data.candidates[0].finishReason}`;
-    } else {
-      reply = data?.candidates?.[0]?.content?.parts?.[0]?.text || 'Something went wrong. Try again.';
-    }
-
-    typing.remove();
-    addMsg(reply, 'bot');
-    history.push({ role: 'model', parts: [{ text: reply }] });
-
-  } catch (err) {
-    console.error('Fetch failed:', err);
-    typing.remove();
-    addMsg(`Network error: ${err.message}`, 'bot');
-  } finally {
-    isLoading = false;
-    sendBtn.disabled = false;
-    input.disabled = false;
-    sendBtn.style.opacity = '1';
-    input.focus();
-  }
-}
-
-  sendBtn.addEventListener('click', send);
-  input.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter' && !e.shiftKey) {
-    e.preventDefault();
-    send();
-  }
-  input.style.height = 'auto';
-  input.style.height = Math.min(input.scrollHeight, 90) + 'px';
-});
-})();
+/* == 16. AI CHATBOT: moved to chat-widget.js, shared with offduty.html == */
 
 /* ══ 17. CONTACT FORM ════════════════════════════════════════
    POSTs to the n8n production webhook. Honeypot filters basic
    bots. Render's free tier can cold-start (~30-50s) after being
    idle — the status message adapts if a send is taking a while. */
+
 (function initContactForm() {
   const N8N_WEBHOOK_URL = 'https://portfolio-gemini-bridge.branwelclint-pro.workers.dev/contact';
   const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // mirrors the IF node's check in n8n
-  const SLOW_NOTICE_MS = 6000;
-  const TIMEOUT_MS = 45000; //covers a cold Render instance waking up
+  const SLOW_NOTICE_MS = 4000;
+  // The worker now only puts the message on a queue and replies, so this call
+  // is fast. It no longer waits on the sleeping Render instance, which is what
+  // used to blow past 45s and report a failure for a message that had landed.
+  const TIMEOUT_MS = 20000;
+  const MAX_ATTEMPTS = 3;      // for transient network errors only
+  const RETRY_BASE_MS = 1200;  // 1.2s, then 2.4s
 
   const form      = document.getElementById('contact-form');
   const nameEl     = document.getElementById('cf-name');
@@ -585,6 +462,20 @@ async function send() {
   if (!form || !nameEl || !emailEl || !msgEl || !submitBtn || !submitTxt || !statusEl) return;
 
   let isSending = false;
+
+  // One id per message the visitor composed, reused across retries so the
+  // backend can tell a retry apart from a genuinely new submission. Cleared
+  // only once a message is actually accepted.
+  let submissionId = null;
+
+  function newId() {
+    if (window.crypto && typeof window.crypto.randomUUID === 'function') {
+      return window.crypto.randomUUID();
+    }
+    return 'cf-' + Date.now() + '-' + Math.random().toString(16).slice(2);
+  }
+
+  const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
   function setStatus(text, type) {
     statusEl.textContent = text;
@@ -609,7 +500,7 @@ async function send() {
     e.preventDefault();
     if (isSending) return;
 
-    // Honeypot tripped — act like it worked, but never touch the network.
+    // Honeypot tripped: act like it worked, but never touch the network.
     if (honeypot && honeypot.value.trim()) {
       setStatus("Message sent! I'll get back to you soon.", 'success');
       form.reset();
@@ -626,50 +517,80 @@ async function send() {
     submitTxt.textContent = 'SENDING...';
     setStatus('Sending message...', 'loading');
 
+    // Same id for every attempt at this same message.
+    if (!submissionId) submissionId = newId();
+
+    const payload = {
+      submission_id: submissionId,
+      name: nameEl.value.trim(),
+      email: emailEl.value.trim(),
+      message: msgEl.value.trim(),
+      honeypot: honeypot ? honeypot.value.trim() : ''
+    };
+
     const slowNotice = setTimeout(() => {
-      setStatus('Still sending — server may be waking up, hang tight...', 'pending');
+      setStatus('Still working, hang tight...', 'pending');
     }, SLOW_NOTICE_MS);
 
-    const controller = new AbortController();
-    const abortTimer = setTimeout(() => controller.abort(), TIMEOUT_MS);
+    let lastError = null;
 
     try {
-      const res = await fetch(N8N_WEBHOOK_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: nameEl.value.trim(),
-          email: emailEl.value.trim(),
-          message: msgEl.value.trim(),
-          honeypot: honeypot.value.trim()
-        }),
-        signal: controller.signal
-      });
+      for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+        const controller = new AbortController();
+        const abortTimer = setTimeout(() => controller.abort(), TIMEOUT_MS);
 
-      let data = null;
-      try { data = await res.json(); } catch (_) { /* empty/non-JSON body is fine */ }
+        try {
+          const res = await fetch(N8N_WEBHOOK_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+            signal: controller.signal
+          });
 
-      if (res.ok && data?.message) {
-        // Shows the exact custom message n8n sends back (true-post or spam-post text)
-        setStatus(data.message, 'success');
-        form.reset();
-      } else if (res.ok) {
-        setStatus("Message sent! I'll get back to you soon.", 'success');
-        form.reset();
-      } else {
-        setStatus(data?.message || data?.error || 'Something went wrong. Please try again.', 'error');
+          let data = null;
+          try { data = await res.json(); } catch (_) { /* empty/non-JSON body is fine */ }
+
+          // 202 = accepted onto the delivery queue. Everything after this point
+          // happens server-side and retries on its own, so this counts as done.
+          if (res.ok || res.status === 202) {
+            setStatus(data?.message || "Message sent! I'll get back to you soon.", 'success');
+            form.reset();
+            submissionId = null;   // next message gets a fresh id
+            return;
+          }
+
+          // The server rejected the content itself. Retrying would send the
+          // exact same thing, so stop and say so.
+          if (res.status >= 400 && res.status < 500) {
+            setStatus(
+              data?.message || data?.error || 'That message could not be accepted. Please reword it and try again.',
+              'error'
+            );
+            return;
+          }
+
+          lastError = new Error('server ' + res.status);
+        } catch (err) {
+          lastError = err;
+        } finally {
+          clearTimeout(abortTimer);
+        }
+
+        // Transient failure: pause, then retry with the same id.
+        if (attempt < MAX_ATTEMPTS) {
+          setStatus('Connection hiccup, retrying (' + attempt + '/' + (MAX_ATTEMPTS - 1) + ')...', 'pending');
+          await sleep(RETRY_BASE_MS * attempt);
+        }
       }
-    } catch (err) {
-      console.error('Contact form failed:', err);
+
+      // Every attempt failed. Say so plainly and give a route that always works.
+      console.error('Contact form failed:', lastError);
       setStatus(
-        err.name === 'AbortError'
-          ? 'Taking too long to respond. Please try again in a moment.'
-          : 'Could not reach the server. Check your connection and try again.',
+        'Could not reach the server. Please email me directly at branwelclint.pro@gmail.com.',
         'error'
       );
     } finally {
       clearTimeout(slowNotice);
-      clearTimeout(abortTimer);
       isSending = false;
       submitBtn.disabled = false;
       submitTxt.textContent = 'SEND MESSAGE';
