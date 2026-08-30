@@ -107,6 +107,17 @@
   line-height: 1;
 }
 .chat-expand:hover { color: var(--cyan, #00d4ff); }
+.chat-min {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.5);
+  font-size: 1.15rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 4px;
+  transition: color 0.2s;
+}
+.chat-min:hover { color: var(--cyan, #00d4ff); }
 
 /* Expanded state */
 .chat-widget.expanded {
@@ -201,7 +212,8 @@
     </div>
     <div class="chat-header-right">
       <button id="chat-expand" class="chat-expand" title="Expand">⤢</button>
-      <button id="chat-close" class="chat-close">✕</button>
+      <button id="chat-min" class="chat-min" title="Minimize" aria-label="Minimize chat">–</button>
+      <button id="chat-close" class="chat-close" title="Close and clear" aria-label="Close chat">✕</button>
     </div>
   </div>
   <div id="chat-messages" class="chat-messages">
@@ -242,9 +254,47 @@
     });
 
     const history = [];
+    const minBtn = document.getElementById('chat-min');
+    const GREETING = messages.innerHTML;   // captured before anything is said
 
-    btn.addEventListener('click', () => widget.classList.remove('hidden'));
-    closeBtn.addEventListener('click', () => widget.classList.add('hidden'));
+    function isOpen() { return !widget.classList.contains('hidden'); }
+
+    function openChat() {
+      widget.classList.remove('hidden');
+      btn.classList.add('is-open');
+      btn.title = 'Minimize chat';
+      input.focus();
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    // Minimise: tuck the panel away but keep the conversation exactly as it is,
+    // so reopening carries straight on.
+    function minimizeChat() {
+      widget.classList.add('hidden');
+      btn.classList.remove('is-open');
+      btn.title = 'Ask about Clint';
+    }
+
+    // The bubble is now a toggle: tap to open, tap again to minimise.
+    btn.addEventListener('click', () => {
+      if (isOpen()) minimizeChat(); else openChat();
+    });
+
+    if (minBtn) minBtn.addEventListener('click', minimizeChat);
+
+    // Close is the harder action: it ends the conversation and resets to the
+    // greeting, so the next visitor to this browser starts clean.
+    closeBtn.addEventListener('click', () => {
+      minimizeChat();
+      history.length = 0;
+      messages.innerHTML = GREETING;
+      if (isExpanded) {
+        isExpanded = false;
+        widget.classList.remove('expanded');
+        expandBtn.textContent = '\u2922';
+        expandBtn.title = 'Expand';
+      }
+    });
 
     function parseMarkdown(text) {
     return text
