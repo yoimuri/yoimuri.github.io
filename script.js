@@ -448,6 +448,12 @@ function scrambleText(el) {
   // used to blow past 45s and report a failure for a message that had landed.
   const TIMEOUT_MS = 20000;
   const MAX_ATTEMPTS = 3;      // for transient network errors only
+  // Keep the sending state on screen for at least this long. The worker now
+  // answers in milliseconds, and a state that appears and vanishes inside
+  // ~300ms is not perceived at all, so the visitor never sees their message
+  // being sent and it reads as though nothing happened. Short and honest,
+  // not a fake progress bar.
+  const MIN_SEND_MS = 1400;
   const RETRY_BASE_MS = 1200;  // 1.2s, then 2.4s
 
   const form      = document.getElementById('contact-form');
@@ -476,6 +482,47 @@ function scrambleText(el) {
   }
 
   const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
+  // ── confirmation dialog ──────────────────────────────────────
+  const modal = document.getElementById('cf-modal');
+
+  function closeModal() {
+    if (!modal) return;
+    modal.hidden = true;
+    document.body.style.overflow = '';
+    document.removeEventListener('keydown', onModalKey);
+    submitBtn.focus();               // put focus somewhere sensible again
+  }
+
+  function onModalKey(e) {
+    if (e.key === 'Escape') { closeModal(); return; }
+    if (e.key !== 'Tab' || !modal) return;
+    // Keep tabbing inside the dialog while it is open.
+    const items = modal.querySelectorAll('button');
+    if (!items.length) return;
+    const first = items[0], last = items[items.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  }
+
+  function openModal(name, ref) {
+    if (!modal) return false;
+    const n = modal.querySelector('#cf-modal-name');
+    const r = modal.querySelector('#cf-modal-ref');
+    if (n) n.textContent = (name || '').trim().split(/\s+/)[0] || 'there';
+    if (r) r.textContent = ref || '\u2014';
+    modal.hidden = false;
+    document.body.style.overflow = 'hidden';
+    document.addEventListener('keydown', onModalKey);
+    const btn = modal.querySelector('.cf-modal-btn');
+    if (btn) btn.focus();
+    return true;
+  }
+
+  if (modal) {
+    modal.querySelectorAll('[data-cf-close]').forEach(el =>
+      el.addEventListener('click', closeModal));
+  }
 
   function setStatus(text, type) {
     statusEl.textContent = text;
@@ -516,6 +563,7 @@ function scrambleText(el) {
     submitBtn.disabled = true;
     submitTxt.textContent = 'SENDING...';
     setStatus('Sending message...', 'loading');
+    const sendStartedAt = Date.now();
 
     // Same id for every attempt at this same message.
     if (!submissionId) submissionId = newId();
@@ -553,9 +601,17 @@ function scrambleText(el) {
           // 202 = accepted onto the delivery queue. Everything after this point
           // happens server-side and retries on its own, so this counts as done.
           if (res.ok || res.status === 202) {
+            // Let the sending state actually be seen before it resolves.
+            const elapsed = Date.now() - sendStartedAt;
+            if (elapsed < MIN_SEND_MS) await sleep(MIN_SEND_MS - elapsed);
+
+            const senderName = nameEl.value;
+            const ref = data?.submission_id || payload.submission_id;
+
             setStatus(data?.message || "Message sent! I'll get back to you soon.", 'success');
             form.reset();
             submissionId = null;   // next message gets a fresh id
+            openModal(senderName, ref);
             return;
           }
 

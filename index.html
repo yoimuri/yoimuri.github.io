@@ -691,6 +691,48 @@
     </div>
   </section>
 
+  <!-- CONTACT CONFIRMATION -->
+  <div id="cf-modal" class="cf-modal" hidden>
+    <div class="cf-modal-backdrop" data-cf-close></div>
+    <div class="cf-modal-card hud-card" role="dialog" aria-modal="true"
+         aria-labelledby="cf-modal-title" aria-describedby="cf-modal-body">
+      <div class="hud-corner tl"></div><div class="hud-corner tr"></div>
+      <div class="hud-corner bl"></div><div class="hud-corner br"></div>
+
+      <div class="cf-modal-icon" aria-hidden="true">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
+          <path d="M4 12.5 L9.5 18 L20 6.5" stroke="currentColor" stroke-width="2.4"
+                stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+
+      <h3 id="cf-modal-title" class="cf-modal-title">Message queued</h3>
+
+      <div id="cf-modal-body" class="cf-modal-body">
+        <p>Thanks <span id="cf-modal-name">there</span>, I have your message.</p>
+        <p class="cf-modal-note">
+          This site runs on free hosting, so my server may need a minute or two to
+          wake up before your message reaches my inbox. It is safely stored either
+          way, and it will not be lost while that happens.
+        </p>
+        <p class="cf-modal-note">
+          I reply by email, usually within a day or two.
+        </p>
+      </div>
+
+      <div class="cf-modal-ref">
+        <span class="cf-modal-ref-label">REFERENCE</span>
+        <code id="cf-modal-ref">&mdash;</code>
+      </div>
+
+      <button type="button" class="btn btn-primary cf-modal-btn" data-cf-close>
+        <span class="btn-corner tl"></span><span class="btn-corner tr"></span>
+        GOT IT
+        <span class="btn-corner bl"></span><span class="btn-corner br"></span>
+      </button>
+    </div>
+  </div>
+
   <!-- FOOTER -->
   <footer>
     <div class="footer-inner">
