@@ -355,6 +355,22 @@
         return;
       }
 
+      // 503 = Google's AI is overloaded (the Worker already retried and tried a
+      // fallback model before giving up). Show a note from Clint instead of the
+      // raw API error, and drop the unanswered question from history so a retry
+      // doesn't send it twice.
+      if (res.status === 503) {
+        typing.remove();
+        history.pop();
+        addMsg(
+          "Hey, this is Clint. The AI that runs this chat is getting too many requests right now so it can't answer you at the moment, but you can try again in a minute or just email me at " +
+          '<a href="mailto:branwelclint.pro@gmail.com" style="color:#00e5ff;text-decoration:underline">branwelclint.pro@gmail.com</a>' +
+          " and I'll reply to you myself.",
+          'bot'
+        );
+        return;
+      }
+
       const data = await res.json();
       console.log('Gemini response:', data);
 
