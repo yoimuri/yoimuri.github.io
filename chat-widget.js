@@ -218,7 +218,7 @@
   </div>
   <div id="chat-messages" class="chat-messages">
     <div class="chat-msg bot">
-      <span>Hi! I can answer questions about Clint, his skills, projects, background, and experience. What do you want to know?</span>
+      <span>This chatbot is retired along with this site. Clint's new portfolio has a newer assistant with up-to-date answers: <a href="https://yoimuri.vercel.app/" target="_blank" rel="noopener noreferrer"><b>yoimuri.vercel.app</b></a></span>
     </div>
   </div>
   <div class="chat-input-row">
@@ -296,6 +296,16 @@
       }
     });
 
+    // Escapes anything a visitor typed, so their text can never run as HTML in the page.
+    // (Before this, typing <img src=x onerror=...> into the chat would execute it.)
+    function escapeHtml(text) {
+      return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    // RETIRED (Oct 2026): every question gets this fixed reply and nothing is sent anywhere.
+    const RETIRED_REPLY = 'This chatbot is retired along with this site, so it no longer answers questions. ' +
+      'Clint\'s new portfolio has a newer assistant: <a href="https://yoimuri.vercel.app/" target="_blank" rel="noopener noreferrer"><b>yoimuri.vercel.app</b></a>';
+
     function parseMarkdown(text) {
     return text
       .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
@@ -318,6 +328,12 @@
     const text = input.value.trim();
     input.style.height = 'auto';
     if (!text || isLoading) return; // block if already waiting
+
+    // Retired: show the question (escaped) and the fixed reply. No network call.
+    input.value = '';
+    addMsg(escapeHtml(text), 'user');
+    addMsg(RETIRED_REPLY, 'bot');
+    return;
 
     if (!API_URL) {
       addMsg('AI API is not configured. Try again later.', 'bot');

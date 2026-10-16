@@ -467,6 +467,20 @@ function scrambleText(el) {
 
   if (!form || !nameEl || !emailEl || !msgEl || !submitBtn || !submitTxt || !statusEl) return;
 
+  // RETIRED (Oct 2026): this site is being retired in favour of the new portfolio, so
+  // the form no longer sends anything. The fields are disabled so nobody writes a long
+  // message for nothing, and the status line points to the new site.
+  // To bring the form back, set RETIRED to false.
+  const RETIRED = true;
+  if (RETIRED) {
+    [nameEl, emailEl, msgEl, submitBtn].forEach(el => { el.disabled = true; });
+    submitTxt.textContent = 'FORM RETIRED';
+    statusEl.className = 'form-status';
+    statusEl.innerHTML = 'This form is retired. Message me on my ' +
+      '<a href="https://yoimuri.vercel.app/#contact">new portfolio</a> instead.';
+    return;
+  }
+
   let isSending = false;
 
   // One id per message the visitor composed, reused across retries so the
